@@ -27,15 +27,19 @@ set(EXECUTABLE_NAME dungeons)
 add_executable(${EXECUTABLE_NAME})
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME}
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 
 target_sources(${EXECUTABLE_NAME} PRIVATE
-    src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/main.cpp
 )
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
+)
+
+target_precompile_headers(${EXECUTABLE_NAME} PRIVATE
+    ${PROJECT_SOURCE_DIR}/include/pch.hpp
 )
 
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE raylib)
