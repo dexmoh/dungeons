@@ -16,6 +16,10 @@ public:
     Atom();
     ~Atom();
 
+    // Called when the object is ready to start getting drawn and processed.
+    // Ready is only called once.
+    virtual void ready(Game* ctx);
+
     // Called every tick.
     virtual void tick();
 

@@ -17,6 +17,7 @@ Game::~Game() {
 void Game::run() {
     if (!_level)
         _level = Level::generate_placeholder();
+        _level->ready(this);
 
     while (!WindowShouldClose()) {
         const float delta = GetFrameTime();

@@ -1,5 +1,6 @@
 #include "tile.hpp"
 
+#include "game.hpp"
 #include "atoms/terrains/terrain.hpp"
 #include "atoms/objects/object.hpp"
 #include "atoms/mobs/mob.hpp"
@@ -15,6 +16,21 @@ Tile::Tile(Vector2i position)
 
 Tile::~Tile()
 {}
+
+void Tile::ready(Game* ctx) {
+    if (_terrain)
+        _terrain->ready(ctx);
+    
+    for (auto& obj : _objects)
+        if (obj)
+            obj->ready(ctx);
+
+    if (_mob)
+        _mob->ready(ctx);
+
+    if (_area)
+        _area->ready(ctx);
+}
 
 void Tile::draw(float delta) {
     if (_terrain)
@@ -32,4 +48,6 @@ void Tile::draw(float delta) {
 }
 
 Vector2i Tile::get_position() const { return _position; }
+
 void Tile::set_position(Vector2i position) { _position = position; }
+void Tile::set_terrain(std::unique_ptr<Terrain> terrain) { _terrain = std::move(terrain); }

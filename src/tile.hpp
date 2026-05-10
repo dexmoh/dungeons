@@ -2,6 +2,7 @@
 
 #include "pch.hpp"
 
+class Game;
 class Terrain;
 class Object;
 class Mob;
@@ -22,10 +23,15 @@ public:
     Tile(Vector2i position);
     ~Tile();
 
+    // Forwards ready call to all atoms belonging to the tile.
+    void ready(Game* ctx);
+
     // Draw tile elements in correct order.
     void draw(float delta);
 
     Vector2i get_position() const;
+
     void set_position(Vector2i position);
+    void set_terrain(std::unique_ptr<Terrain> terrain);
 
 };

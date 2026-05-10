@@ -1,6 +1,8 @@
 #include "level.hpp"
 
+#include "game.hpp"
 #include "tile.hpp"
+#include "atoms/terrains/terrain.hpp"
 
 Level::Level(Vector2i size)
     : _size{ size }, _tiles{ nullptr }
@@ -30,6 +32,14 @@ Level::~Level() {
     }
 }
 
+void Level::ready(Game* ctx) {
+    for (int y = 0; y < _size.y; y++) {
+        for (int x = 0; x < _size.x; x++) {
+            _tiles[y * _size.x + x].ready(ctx);
+        }
+    }
+}
+
 void Level::draw(float delta) {
     for (int y = 0; y < _size.y; y++) {
         for (int x = 0; x < _size.x; x++) {
@@ -53,7 +63,11 @@ std::unique_ptr<Level> Level::generate_placeholder() {
 
     for (int x = 0; x < lvl_size.x; x++) {
         for (int y = 0; y < lvl_size.y; y++) {
-            // Do something.
+            auto terrain = std::make_unique<Terrain>();
+            terrain->set_position({x, y});
+
+            Tile* tile = lvl->get_tile({x, y});
+            tile->set_terrain(std::move(terrain));
         }
     }
 
