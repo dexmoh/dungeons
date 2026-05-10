@@ -20,9 +20,6 @@ void Atom::draw(float delta) {
     Color col = BLACK;
     const int TILE_SIZE = 32;
 
-    if (_position.x % 2)
-        col = WHITE;
-
     DrawRectangle(
         _position.x * TILE_SIZE,
         _position.y * TILE_SIZE,

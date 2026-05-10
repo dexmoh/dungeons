@@ -40,6 +40,14 @@ void Level::ready(Game* ctx) {
     }
 }
 
+void Level::tick() {
+    for (int y = 0; y < _size.y; y++) {
+        for (int x = 0; x < _size.x; x++) {
+            _tiles[y * _size.x + x].tick();
+        }
+    }
+}
+
 void Level::draw(float delta) {
     for (int y = 0; y < _size.y; y++) {
         for (int x = 0; x < _size.x; x++) {

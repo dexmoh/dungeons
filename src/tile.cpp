@@ -32,6 +32,21 @@ void Tile::ready(Game* ctx) {
         _area->ready(ctx);
 }
 
+void Tile::tick() {
+    if (_terrain)
+        _terrain->tick();
+    
+    for (auto& obj : _objects)
+        if (obj)
+            obj->tick();
+
+    if (_mob)
+        _mob->tick();
+
+    if (_area)
+        _area->tick();
+}
+
 void Tile::draw(float delta) {
     if (_terrain)
         _terrain->draw(delta);

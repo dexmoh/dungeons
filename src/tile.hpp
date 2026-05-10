@@ -23,10 +23,13 @@ public:
     Tile(Vector2i position);
     ~Tile();
 
-    // Forwards ready call to all atoms belonging to the tile.
+    // Forwards a ready call to all atoms belonging to the tile. Called only once.
     void ready(Game* ctx);
 
-    // Draw tile elements in correct order.
+    // Forwards a tick call to all atoms belonging to the tile. Called every tick.
+    void tick();
+
+    // Forwards a draw call to all atoms belonging to the tile. Called every frame.
     void draw(float delta);
 
     Vector2i get_position() const;
