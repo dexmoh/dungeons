@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 project(dungeons VERSION 0.1.0 LANGUAGES C CXX)
 
+set(CMAKE_CXX_EXTENSIONS Off)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Download raylib with FetchContent.
@@ -32,14 +33,23 @@ set_target_properties(${EXECUTABLE_NAME} PROPERTIES
 
 target_sources(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/game.cpp
+    ${PROJECT_SOURCE_DIR}/src/level.cpp
+    ${PROJECT_SOURCE_DIR}/src/tile.cpp
+    ${PROJECT_SOURCE_DIR}/src/vector2i.cpp
+    ${PROJECT_SOURCE_DIR}/src/atoms/atom.cpp
+    ${PROJECT_SOURCE_DIR}/src/atoms/terrains/terrain.cpp
+    ${PROJECT_SOURCE_DIR}/src/atoms/objects/object.cpp
+    ${PROJECT_SOURCE_DIR}/src/atoms/mobs/mob.cpp
+    ${PROJECT_SOURCE_DIR}/src/atoms/areas/area.cpp
 )
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/src
 )
 
 target_precompile_headers(${EXECUTABLE_NAME} PRIVATE
-    ${PROJECT_SOURCE_DIR}/include/pch.hpp
+    ${PROJECT_SOURCE_DIR}/src/pch.hpp
 )
 
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE raylib)
