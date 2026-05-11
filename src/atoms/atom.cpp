@@ -17,14 +17,21 @@ void Atom::tick()
 {}
 
 void Atom::draw(float delta) {
+    auto tile_size = _ctx->get_tile_size();
     Color col = BLACK;
-    const int TILE_SIZE = 32;
+
+    if (_position.x == 0 && _position.y == 0)
+        col = BLUE;
+    else if (_position.x == 0 && _position.y == 1)
+        col = GREEN;
+    else if (_position.x == 1 && _position.y == 0)
+        col = RED;
 
     DrawRectangle(
-        _position.x * TILE_SIZE,
-        _position.y * TILE_SIZE,
-        TILE_SIZE,
-        TILE_SIZE,
+        _position.x * tile_size.x,
+        _position.y * -tile_size.y - tile_size.y,
+        tile_size.x,
+        tile_size.y,
         col
     );
 }
