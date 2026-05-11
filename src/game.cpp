@@ -4,13 +4,17 @@
 #include "camera_controller.hpp"
 
 Game::Game()
-    : _tile_size{ 32, 64 }, _tps{ _S_DEFAULT_TPS }
+    : _tile_size{ _S_DEFAULT_TILE_SIZE, _S_DEFAULT_TILE_SIZE },
+      _tps{ _S_DEFAULT_TPS }
 {
     // Create a maximized raylib window.
-    InitWindow(640, 480, "Dungeons");
+    InitWindow(800, 600, "Dungeons");
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     MaximizeWindow();
     SetTargetFPS(_S_DEFAULT_TARGET_FPS);
+
+    // Load and initialize textures.
+    _tex_manager.init();
 
     // Initialize camera.
     _camera.init(this);
@@ -44,7 +48,7 @@ void Game::run() {
 
         // Draw to the screen.
         BeginDrawing();
-            ClearBackground(SKYBLUE);
+            ClearBackground(DARKBLUE);
 
             // Draw game world.
             BeginMode2D(_camera.get_rl_camera());
@@ -62,4 +66,5 @@ void Game::run() {
     }
 }
 
+const TextureManager& Game::get_tex_manager() const { return _tex_manager; }
 Vector2i Game::get_tile_size() const { return _tile_size; }

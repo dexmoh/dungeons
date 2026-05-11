@@ -66,13 +66,18 @@ Tile* Level::get_tile(Vector2i position) const {
 }
 
 std::unique_ptr<Level> Level::generate_placeholder() {
-    Vector2i lvl_size = { 100, 100 };
+    Vector2i lvl_size = { 20, 20 };
     auto lvl = std::make_unique<Level>(lvl_size);
 
     for (int x = 0; x < lvl_size.x; x++) {
         for (int y = 0; y < lvl_size.y; y++) {
             auto terrain = std::make_unique<Terrain>();
             terrain->set_position({x, y});
+
+            if (x == 0 || x == lvl_size.x - 1 || y == 0 || y == lvl_size.y - 1)
+                terrain->set_sprite_id(1);
+            else
+                terrain->set_sprite_id(0);
 
             Tile* tile = lvl->get_tile({x, y});
             tile->set_terrain(std::move(terrain));

@@ -37,6 +37,7 @@ target_sources(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/src/level.cpp
     ${PROJECT_SOURCE_DIR}/src/tile.cpp
     ${PROJECT_SOURCE_DIR}/src/camera_controller.cpp
+    ${PROJECT_SOURCE_DIR}/src/texture_manager.cpp
     ${PROJECT_SOURCE_DIR}/src/vector2i.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/atom.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/terrains/terrain.cpp
