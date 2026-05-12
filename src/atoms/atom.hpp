@@ -32,7 +32,7 @@ public:
     virtual void tick();
 
     // Used for drawing things to the screen during rendering.
-    virtual void draw(float delta);
+    void draw(float delta);
 
     Vector2i get_position() const;
 

@@ -7,7 +7,7 @@ class Terrain;
 class Object;
 class Mob;
 
-// Container for holding information about a tile in the level grid.
+// Container class for holding information about a tile in the level grid.
 class Tile {
 private:
     Vector2i _position;
