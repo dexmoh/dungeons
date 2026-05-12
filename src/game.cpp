@@ -48,7 +48,7 @@ void Game::run() {
 
         // Draw to the screen.
         BeginDrawing();
-            ClearBackground(DARKBLUE);
+            ClearBackground(_level->clear_color);
 
             // Draw game world.
             BeginMode2D(_camera.get_rl_camera());
@@ -56,8 +56,7 @@ void Game::run() {
                 DrawLine(-2000, 0, 2000, 0, RED);
                 DrawLine(0, -2000, 0, 2000, GREEN);
 
-                if (_level)
-                    _level->draw();
+                _level->draw();
             EndMode2D();
 
             DrawText(std::format("Delta: {}", delta).c_str(), 30, 30, 20, RED);

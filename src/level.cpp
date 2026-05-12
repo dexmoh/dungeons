@@ -5,7 +5,7 @@
 #include "atoms/terrains/terrain.hpp"
 
 Level::Level(Vector2i size)
-    : _size{ size }, _tiles{ nullptr }
+    : _size{ size }, _tiles{ nullptr }, clear_color{ DEFAULT_CLEAR_COLOR }
 {
     if (_size.width() > 0 && _size.height() > 0) {
         _tiles = new Tile[_size.width() * _size.height()];

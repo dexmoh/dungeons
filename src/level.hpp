@@ -11,6 +11,10 @@ private:
     Tile* _tiles;
 
 public:
+    Color clear_color;
+    static constexpr Color DEFAULT_CLEAR_COLOR = (Color) { 5, 18, 18, 255 };
+
+public:
     Level(Vector2i size);
     ~Level();
 
