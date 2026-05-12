@@ -31,8 +31,8 @@ public:
     // Called every tick.
     virtual void tick();
 
-    // Used for drawing things to the screen during rendering.
-    void draw(float delta);
+    // Draws atom to the screen every frame.
+    void draw() const;
 
     Vector2i get_position() const;
 

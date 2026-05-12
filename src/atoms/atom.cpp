@@ -34,7 +34,7 @@ void Atom::ready(Game* ctx) {
 void Atom::tick()
 {}
 
-void Atom::draw(float delta) {
+void Atom::draw() const {
     DrawTexturePro(
         _texture,
         _texture_src,

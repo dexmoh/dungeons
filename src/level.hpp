@@ -14,14 +14,9 @@ public:
     Level(Vector2i size);
     ~Level();
 
-    // Forwards a ready call to all atoms in the level. Called only once.
-    void ready(Game* ctx);
-
-    // Forwards a tick call to all atoms in the level. Called every tick.
-    void tick();
-
-    // Forwards a draw call to all atoms in the level. Called every frame.
-    void draw(float delta);
+    void ready(Game* ctx); // Forwards a ready call to all atoms in the level. Called only once.
+    void tick();           // Forwards a tick call to all atoms in the level. Called every tick.
+    void draw() const;     // Forwards draw calls to all atoms in the level in correct order. Called every frame.
 
     Tile* get_tile(Vector2i position) const;
 

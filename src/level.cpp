@@ -7,12 +7,12 @@
 Level::Level(Vector2i size)
     : _size{ size }, _tiles{ nullptr }
 {
-    if (_size.x > 0 && _size.y > 0) {
-        _tiles = new Tile[size.x * size.y];
+    if (_size.width() > 0 && _size.height() > 0) {
+        _tiles = new Tile[_size.width() * _size.height()];
 
         // Initialize tiles.
-        for (int x = 0; x < _size.x; x++) {
-            for (int y = 0; y < _size.y; y++) {
+        for (int x = 0; x < _size.width(); x++) {
+            for (int y = 0; y < _size.height(); y++) {
                 _tiles[y * _size.x + x].set_position({x, y});
             }
         }
@@ -48,12 +48,18 @@ void Level::tick() {
     }
 }
 
-void Level::draw(float delta) {
-    for (int y = 0; y < _size.y; y++) {
-        for (int x = 0; x < _size.x; x++) {
-            _tiles[y * _size.x + x].draw(delta);
-        }
-    }
+void Level::draw() const {
+    // Draw terrain.
+    for (int i = 0; i < _size.width() * _size.height(); i++)
+        _tiles[i].draw_terrain();
+
+    // Draw objects.
+    for (int i = 0; i < _size.width() * _size.height(); i++)
+        _tiles[i].draw_objects();
+
+    // Draw mobs.
+    for (int i = 0; i < _size.width() * _size.height(); i++)
+        _tiles[i].draw_mob();
 }
 
 Tile* Level::get_tile(Vector2i position) const {
@@ -69,18 +75,14 @@ std::unique_ptr<Level> Level::generate_placeholder() {
     Vector2i lvl_size = { 20, 20 };
     auto lvl = std::make_unique<Level>(lvl_size);
 
-    for (int x = 0; x < lvl_size.x; x++) {
-        for (int y = 0; y < lvl_size.y; y++) {
-            auto terrain = std::make_unique<Terrain>();
-            terrain->set_position({x, y});
-
-            if (x == 0 || x == lvl_size.x - 1 || y == 0 || y == lvl_size.y - 1)
-                terrain->set_sprite_id(1);
-            else
-                terrain->set_sprite_id(0);
-
+    for (int x = 0; x < lvl_size.width(); x++) {
+        for (int y = 0; y < lvl_size.height(); y++) {
             Tile* tile = lvl->get_tile({x, y});
-            tile->set_terrain(std::move(terrain));
+
+            if (x == 0 || x == lvl_size.width() - 1 || y == 0 || y == lvl_size.height() - 1)
+                tile->get_terrain().set_sprite_id(1);
+            else
+                tile->get_terrain().set_sprite_id(0);
         }
     }
 

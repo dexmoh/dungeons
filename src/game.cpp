@@ -57,7 +57,7 @@ void Game::run() {
                 DrawLine(0, -2000, 0, 2000, GREEN);
 
                 if (_level)
-                    _level->draw(delta);
+                    _level->draw();
             EndMode2D();
 
             DrawText(std::format("Delta: {}", delta).c_str(), 30, 30, 20, RED);
