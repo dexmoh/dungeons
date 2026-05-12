@@ -13,7 +13,7 @@ void CameraController::init(Game* ctx) {
     set_position(_position);
 
     _camera.rotation = 0.0f;
-    _camera.zoom = _S_DEFAULT_ZOOM;
+    _camera.zoom = DEFAULT_ZOOM;
 }
 
 void CameraController::update(float delta) {
@@ -39,15 +39,15 @@ void CameraController::update(float delta) {
     if (IsKeyPressed(KEY_Z)) {
         // Zoom out.
         if (IsKeyDown(KEY_LEFT_SHIFT)) {
-            _camera.zoom /= _S_ZOOM_FACTOR;
-            if (_camera.zoom < _S_MIN_ZOOM)
-                _camera.zoom = _S_MIN_ZOOM;
+            _camera.zoom /= ZOOM_FACTOR;
+            if (_camera.zoom < MIN_ZOOM)
+                _camera.zoom = MIN_ZOOM;
         }
         // Zoom in.
         else {
-            _camera.zoom *= _S_ZOOM_FACTOR;
-            if (_camera.zoom > _S_MAX_ZOOM)
-                _camera.zoom = _S_MAX_ZOOM;
+            _camera.zoom *= ZOOM_FACTOR;
+            if (_camera.zoom > MAX_ZOOM)
+                _camera.zoom = MAX_ZOOM;
         }
     }
 }
@@ -59,9 +59,8 @@ void CameraController::recenter() {
     };
 }
 
-Camera2D CameraController::get_rl_camera() const {
-    return _camera;
-}
+Camera2D CameraController::get_rl_camera() const { return _camera; }
+float CameraController::get_rotation() const { return _camera.rotation; }
 
 void CameraController::set_position(Vector2i position) {
     _position = position;
@@ -72,3 +71,5 @@ void CameraController::set_position(Vector2i position) {
         -_position.y * tile_size.y - (tile_size.y / 2.0f)
     };
 }
+
+void CameraController::set_rotation(float new_rotation) { _camera.rotation = new_rotation; }

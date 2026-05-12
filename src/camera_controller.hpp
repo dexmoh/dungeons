@@ -11,10 +11,11 @@ private:
     Camera2D _camera;   // Raylib camera container.
     Vector2i _position; // Camera's position in the world grid.
 
-    static constexpr float _S_MIN_ZOOM = 0.5f;
-    static constexpr float _S_MAX_ZOOM = 20.0f;
-    static constexpr float _S_DEFAULT_ZOOM = 2.0f;
-    static constexpr float _S_ZOOM_FACTOR = 1.5f;
+public:
+    static constexpr float MIN_ZOOM     = 0.5f;
+    static constexpr float MAX_ZOOM     = 20.0f;
+    static constexpr float DEFAULT_ZOOM = 2.0f;
+    static constexpr float ZOOM_FACTOR  = 1.8f;
 
 public:
     CameraController();
@@ -28,10 +29,11 @@ public:
     // Recenter camera offset to be in the middle of the screen.
     void recenter();
 
-    // Returns raylib Camera2D container.
-    Camera2D get_rl_camera() const;
+    
+    Camera2D get_rl_camera() const; // Returns raylib Camera2D container.
+    float get_rotation() const;     // Get current camera rotation.
 
-    // Change camera's position.
-    void set_position(Vector2i position);
+    void set_position(Vector2i position);  // Change camera's position.
+    void set_rotation(float new_rotation); // Set new camera rotation.
 
 };

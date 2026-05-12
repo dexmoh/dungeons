@@ -62,6 +62,8 @@ void Level::draw() const {
         _tiles[i].draw_mob();
 }
 
+Vector2i Level::get_size() const { return _size; }
+
 Tile* Level::get_tile(Vector2i position) const {
     if (position.x < 0 || position.y < 0)
         return nullptr;

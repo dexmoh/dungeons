@@ -15,9 +15,11 @@ private:
     Vector2i _tile_size;           // Size of tiles in pixels.
     float _tps;                    // Tick rate.
 
-    static constexpr int _S_DEFAULT_TARGET_FPS = 60;
-    static constexpr int _S_DEFAULT_TILE_SIZE  = 32;
-    static constexpr float _S_DEFAULT_TPS      = 10.0f;
+    static constexpr int _DEFAULT_TARGET_FPS = 60;
+    static constexpr int _DEFAULT_TILE_SIZE  = 32;
+
+public:
+    static constexpr float DEFAULT_TPS = 10.0f;
 
 public:
     Game();
@@ -27,5 +29,8 @@ public:
 
     const TextureManager& get_tex_manager() const;
     Vector2i get_tile_size() const;
+    float get_tps() const;
+
+    void set_tps(float new_tps);
 
 };

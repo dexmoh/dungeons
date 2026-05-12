@@ -22,7 +22,8 @@ public:
     void tick();           // Forwards a tick call to all atoms in the level. Called every tick.
     void draw() const;     // Forwards draw calls to all atoms in the level in correct order. Called every frame.
 
-    Tile* get_tile(Vector2i position) const;
+    Vector2i get_size() const;               // Get level size.
+    Tile* get_tile(Vector2i position) const; // Get a tile from the level grid.
 
     // Generate a placeholder level for testing.
     static std::unique_ptr<Level> generate_placeholder();

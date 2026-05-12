@@ -4,14 +4,14 @@
 #include "camera_controller.hpp"
 
 Game::Game()
-    : _tile_size{ _S_DEFAULT_TILE_SIZE, _S_DEFAULT_TILE_SIZE },
-      _tps{ _S_DEFAULT_TPS }
+    : _tile_size{ _DEFAULT_TILE_SIZE, _DEFAULT_TILE_SIZE },
+      _tps{ DEFAULT_TPS }
 {
     // Create a maximized raylib window.
     InitWindow(800, 600, "Dungeons");
     SetWindowState(FLAG_WINDOW_RESIZABLE);
     MaximizeWindow();
-    SetTargetFPS(_S_DEFAULT_TARGET_FPS);
+    SetTargetFPS(_DEFAULT_TARGET_FPS);
 
     // Load and initialize textures.
     _tex_manager.init();
@@ -65,5 +65,9 @@ void Game::run() {
     }
 }
 
+/* Getters & Setters */
 const TextureManager& Game::get_tex_manager() const { return _tex_manager; }
 Vector2i Game::get_tile_size() const { return _tile_size; }
+float Game::get_tps() const { return _tps; }
+
+void Game::set_tps(float new_tps) { _tps = new_tps; }

@@ -10,9 +10,9 @@ enum class TextureID {
 // Class for loading and storing textures.
 class TextureManager {
 private:
-    inline static std::string _S_BASE_TEX_DIR = "assets/textures/";
+    inline static std::string _BASE_TEX_DIR = "assets/textures/";
 
-    inline static const std::unordered_map<TextureID, const char *> _S_TEXTURE_PATHS = {
+    inline static const std::unordered_map<TextureID, const char *> _TEXTURE_PATHS = {
         { TextureID::TEST_TILES, "test_tiles.png" },
         { TextureID::OTHER_TILES, "test_tiles.png" }
     };

@@ -51,7 +51,7 @@ void Tile::draw_mob() const {
         _mob->draw();
 }
 
-/* Getters & setters. */
+/* Getters & Setters */
 Vector2i Tile::get_position() const { return _position; }
 Terrain& Tile::get_terrain() { return _terrain; }
 std::vector<Object> Tile::get_objects() { return _objects; }

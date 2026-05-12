@@ -11,9 +11,9 @@ TextureManager::~TextureManager() {
 }
 
 void TextureManager::init() {
-    for (const auto& [id, path] : _S_TEXTURE_PATHS) {
+    for (const auto& [id, path] : _TEXTURE_PATHS) {
         _textures[id] = LoadTexture(
-            (_S_BASE_TEX_DIR + path).c_str()
+            (_BASE_TEX_DIR + path).c_str()
         );
     }
 }
