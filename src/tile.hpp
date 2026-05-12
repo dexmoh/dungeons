@@ -6,9 +6,8 @@ class Game;
 class Terrain;
 class Object;
 class Mob;
-class Area;
 
-// Represents a single tile in the level grid.
+// Container for holding information about a tile in the level grid.
 class Tile {
 private:
     Vector2i _position;
@@ -16,7 +15,6 @@ private:
     std::unique_ptr<Terrain> _terrain;
     std::vector<std::unique_ptr<Object>> _objects;
     std::unique_ptr<Mob> _mob;
-    std::unique_ptr<Area> _area;
 
 public:
     Tile();

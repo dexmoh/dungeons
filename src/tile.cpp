@@ -4,7 +4,6 @@
 #include "atoms/terrains/terrain.hpp"
 #include "atoms/objects/object.hpp"
 #include "atoms/mobs/mob.hpp"
-#include "atoms/areas/area.hpp"
 
 Tile::Tile()
     : _position{ 0, 0 }
@@ -27,9 +26,6 @@ void Tile::ready(Game* ctx) {
 
     if (_mob)
         _mob->ready(ctx);
-
-    if (_area)
-        _area->ready(ctx);
 }
 
 void Tile::tick() {
@@ -42,9 +38,6 @@ void Tile::tick() {
 
     if (_mob)
         _mob->tick();
-
-    if (_area)
-        _area->tick();
 }
 
 void Tile::draw(float delta) {
@@ -57,9 +50,6 @@ void Tile::draw(float delta) {
 
     if (_mob)
         _mob->draw(delta);
-
-    if (_area)
-        _area->draw(delta);
 }
 
 Vector2i Tile::get_position() const { return _position; }

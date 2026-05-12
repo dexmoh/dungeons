@@ -43,7 +43,6 @@ target_sources(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/src/atoms/terrains/terrain.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/objects/object.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/mobs/mob.cpp
-    ${PROJECT_SOURCE_DIR}/src/atoms/areas/area.cpp
 )
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
