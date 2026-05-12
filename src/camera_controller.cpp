@@ -3,7 +3,7 @@
 #include "game.hpp"
 
 CameraController::CameraController()
-    : _ctx{ nullptr }, _camera{ 0.0f }, _position { 0, 0 }
+    : _ctx{ nullptr }, _camera{ 0.0f }, _position { Vector2i::ZERO }
 {}
 
 void CameraController::init(Game* ctx) {

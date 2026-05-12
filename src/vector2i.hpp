@@ -22,6 +22,8 @@ public:
     int width() const;  // Returns the X component.
     int height() const; // Returns the Y component.
 
+    Vector2i abs() const; // Returns absolute value of vector.
+
     // Converts this vector into a raylib Vector2 which uses floats.
     Vector2 to_rl_vector() const;
 

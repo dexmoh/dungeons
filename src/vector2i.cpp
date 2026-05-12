@@ -24,6 +24,13 @@ Vector2i::Vector2i(int x_val, int y_val)
 int Vector2i::width() const { return x; }
 int Vector2i::height() const { return y; }
 
+Vector2i Vector2i::abs() const {
+    return Vector2i(
+        (x < 0) ? -x : x,
+        (y < 0) ? -y : y
+    );
+}
+
 Vector2 Vector2i::to_rl_vector() const {
     return { float(x), float(y) };
 }
