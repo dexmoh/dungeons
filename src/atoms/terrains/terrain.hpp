@@ -4,4 +4,7 @@
 #include "atoms/atom.hpp"
 
 class Terrain : public Atom {
+public:
+    Terrain();
+
 };

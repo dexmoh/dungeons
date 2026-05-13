@@ -1,9 +1,12 @@
 #include "atoms/terrains/wall.hpp"
 
-#include "game.hpp"
+#include "texture_manager.hpp"
 
-void Wall::ready(Game *ctx) {
-    Terrain::ready(ctx);
+Wall::Wall() {
+    _name = "Wall";
+    _description = "This is a wall.";
 
-    _texture = _ctx->get_tex_manager().get_texture(TextureID::WALLS);
+    set_solid(true);
+    set_texture_id(TextureID::WALLS);
+    set_sprite_id(SpriteID::STONE_WALL_TILE);
 }

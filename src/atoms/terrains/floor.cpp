@@ -1,15 +1,11 @@
 #include "atoms/terrains/floor.hpp"
 
-#include "game.hpp"
+#include "texture_manager.hpp"
 
-Floor::Floor()
-    : Terrain()
-{}
+Floor::Floor() {
+    _name = "Floor";
+    _description = "This is a floor.";
 
-void Floor::ready(Game* ctx) {
-    Terrain::ready(ctx);
-
-    _texture = _ctx->get_tex_manager().get_texture(TextureID::FLOORS);
-    set_sprite_id(GetRandomValue(0, 2));
-
+    set_texture_id(TextureID::FLOORS);
+    set_sprite_id(SpriteID::DIRT_FLOOR_TILE_1);
 }
