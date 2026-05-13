@@ -43,6 +43,18 @@ void Tile::tick() {
         _mob->tick();
 }
 
+void Tile::update(float delta) {
+    if (_terrain)
+        _terrain->update(delta);
+    
+    for (auto& obj : _objects)
+        if (obj)
+            obj->update(delta);
+
+    if (_mob)
+        _mob->update(delta);
+}
+
 void Tile::draw_terrain() const {
     if (_terrain)
         _terrain->draw();

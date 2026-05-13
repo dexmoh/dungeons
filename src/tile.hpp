@@ -27,6 +27,9 @@ public:
     // Forwards a tick call to all atoms belonging to the tile. Called every tick.
     void tick();
 
+    // Forwards an update call to all atoms belonging to the tile. Called every frame.
+    void update(float delta);
+
     void draw_terrain() const; // Forward a draw call to tile's terrain.
     void draw_objects() const; // Forward a draw call to tile's stored objects.
     void draw_mob() const;     // Forward a draw call to a mob that occupies the tile.

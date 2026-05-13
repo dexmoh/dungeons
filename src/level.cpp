@@ -43,6 +43,11 @@ void Level::tick() {
         _tiles[i].tick();
 }
 
+void Level::update(float delta) {
+    for (int i = 0; i < _size.width() * _size.height(); i++)
+        _tiles[i].update(delta);
+}
+
 void Level::draw() const {
     // Draw terrain.
     for (int i = 0; i < _size.width() * _size.height(); i++)

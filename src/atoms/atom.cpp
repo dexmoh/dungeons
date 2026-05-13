@@ -36,8 +36,8 @@ void Atom::ready(Game* ctx) {
     };
 }
 
-void Atom::tick()
-{}
+void Atom::tick() {}
+void Atom::update(float delta) {}
 
 void Atom::draw() const {
     if (!_visible)

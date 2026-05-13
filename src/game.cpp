@@ -45,6 +45,7 @@ void Game::run() {
 
         // Update calls.
         _camera.update(delta);
+        _level->update(delta);
 
         // Draw to the screen.
         BeginDrawing();

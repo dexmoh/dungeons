@@ -36,11 +36,9 @@ public:
     Atom();
     ~Atom();
 
-    // Called when the atom is ready to start being drawn and processed.
-    virtual void ready(Game* ctx);
-
-    // Called every tick.
-    virtual void tick();
+    virtual void ready(Game* ctx);    // Called when the atom is ready to begin being processed.
+    virtual void tick();              // Called every tick.
+    virtual void update(float delta); // Called every frame.
 
     // Draws atom to the screen every frame.
     void draw() const;
