@@ -67,8 +67,8 @@ void CameraController::set_position(Vector2i position) {
     Vector2i tile_size = _ctx->get_tile_size();
 
     _camera.target = (Vector2) {
-        _position.x * tile_size.x + (tile_size.x / 2.0f),
-        -_position.y * tile_size.y - (tile_size.y / 2.0f)
+        _position.x * tile_size.width() + (tile_size.width() / 2.0f),
+        -_position.y * tile_size.height() - (tile_size.height() / 2.0f)
     };
 }
 

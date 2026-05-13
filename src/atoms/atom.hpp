@@ -12,7 +12,12 @@ protected:
     Vector2i _position; // Atom's x and y position in the tile grid.
     Vector2i _offset;   // Offset from atom's position in pixels.
     float _rotation;    // Sprite rotation with the origin in the center.
-    Color _tint;        // Color tint applied to the sprite texture.
+    Color _tint;        // Color tint applied to the atom texture.
+    bool _solid;        // Whether the atom is solid or not.
+    bool _visible;      // Whether the atom is visible or not.
+
+    std::string _name;        // Name of the atom.
+    std::string _description; // Description of the atom.
 
     Texture2D _texture;     // Texture resource used by this atom.
     Rectangle _texture_src; // Location of the sprite in the texture.
@@ -34,9 +39,12 @@ public:
     // Draws atom to the screen every frame.
     void draw() const;
 
+    /* Getters & Setters */
     Vector2i get_position() const;
+    bool get_visibility() const;
 
     void set_position(Vector2i position);
+    void set_visibility(bool visible);
     void set_sprite_id(int id);
 
 };

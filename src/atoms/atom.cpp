@@ -8,6 +8,10 @@ Atom::Atom()
       _offset{ Vector2i::ZERO },
       _rotation{ 0.0f },
       _tint{ WHITE },
+      _solid{ false },
+      _visible{ true },
+      _name{ "Atom" },
+      _description{ "You shouldn't be seeing this." },
       _sprite_origin{ 0.0f, 0.0f },
       _sprite_id{ 0 },
       _ctx{ nullptr }
@@ -35,6 +39,9 @@ void Atom::tick()
 {}
 
 void Atom::draw() const {
+    if (!_visible)
+        return;
+
     DrawTexturePro(
         _texture,
         _texture_src,
@@ -45,7 +52,9 @@ void Atom::draw() const {
     );
 }
 
+/* Getters & Setters */
 Vector2i Atom::get_position() const { return _position; }
+bool Atom::get_visibility() const { return _visible; }
 
 void Atom::set_position(Vector2i position) {
     _position = position;
@@ -62,6 +71,10 @@ void Atom::set_position(Vector2i position) {
         float(tile_size.height()),
         float(tile_size.width())
     };
+}
+
+void Atom::set_visibility(bool visible) {
+    _visible = visible;
 }
 
 void Atom::set_sprite_id(int id) {

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "pch.hpp"
-#include "atoms/terrains/terrain.hpp"
 
 class Game;
+class Terrain;
 class Object;
 class Mob;
 
@@ -12,8 +12,8 @@ class Tile {
 private:
     Vector2i _position;
 
-    Terrain _terrain;
-    std::vector<Object> _objects;
+    std::unique_ptr<Terrain> _terrain;
+    std::vector<std::unique_ptr<Object>> _objects;
     std::unique_ptr<Mob> _mob;
 
 public:
@@ -32,10 +32,10 @@ public:
     void draw_mob() const;     // Forward a draw call to a mob that occupies the tile.
 
     Vector2i get_position() const;
-    Terrain& get_terrain();
-    std::vector<Object> get_objects();
+    Terrain* get_terrain();
+    // const std::vector<std::unique_ptr<Object>>& get_objects() const;
 
     void set_position(Vector2i position);
-    void set_terrain(Terrain terrain);
+    void set_terrain(std::unique_ptr<Terrain> terrain);
 
 };

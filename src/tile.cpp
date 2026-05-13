@@ -1,6 +1,7 @@
 #include "tile.hpp"
 
 #include "game.hpp"
+#include "atoms/terrains/terrain.hpp"
 #include "atoms/objects/object.hpp"
 #include "atoms/mobs/mob.hpp"
 
@@ -11,39 +12,46 @@ Tile::Tile()
 Tile::Tile(Vector2i position)
     : _position{ position }
 {
-    _terrain.set_position(_position);
+    if (_terrain)
+        _terrain->set_position(_position);
 }
 
 Tile::~Tile()
 {}
 
 void Tile::ready(Game* ctx) {
-    _terrain.ready(ctx);
+    if (_terrain)
+        _terrain->ready(ctx);
     
-    for (Object& obj : _objects)
-        obj.ready(ctx);
+    for (auto& obj : _objects)
+        if (obj)
+            obj->ready(ctx);
 
     if (_mob)
         _mob->ready(ctx);
 }
 
 void Tile::tick() {
-    _terrain.tick();
+    if (_terrain)
+        _terrain->tick();
 
-    for (Object& obj : _objects)
-        obj.tick();
+    for (auto& obj : _objects)
+        if (obj)
+            obj->tick();
 
     if (_mob)
         _mob->tick();
 }
 
 void Tile::draw_terrain() const {
-    _terrain.draw();
+    if (_terrain)
+        _terrain->draw();
 }
 
 void Tile::draw_objects() const {
-    for (const Object& obj : _objects)
-        obj.draw();
+    for (const auto& obj : _objects)
+        if (obj)
+            obj->draw();
 }
 
 void Tile::draw_mob() const {
@@ -53,12 +61,18 @@ void Tile::draw_mob() const {
 
 /* Getters & Setters */
 Vector2i Tile::get_position() const { return _position; }
-Terrain& Tile::get_terrain() { return _terrain; }
-std::vector<Object> Tile::get_objects() { return _objects; }
+Terrain* Tile::get_terrain() { return _terrain.get(); }
 
 void Tile::set_position(Vector2i position) {
     _position = position;
-    _terrain.set_position(_position);
+
+    if (_terrain)
+        _terrain->set_position(_position);
 }
 
-void Tile::set_terrain(Terrain terrain) { _terrain = terrain; }
+void Tile::set_terrain(std::unique_ptr<Terrain> terrain) {
+    _terrain = std::move(terrain);
+
+    if (_terrain)
+        _terrain->set_position(_position);
+}

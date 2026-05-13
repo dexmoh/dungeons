@@ -2,7 +2,8 @@
 
 #include "game.hpp"
 #include "tile.hpp"
-#include "atoms/terrains/terrain.hpp"
+#include "atoms/terrains/floor.hpp"
+#include "atoms/terrains/wall.hpp"
 
 Level::Level(Vector2i size)
     : _size{ size }, _tiles{ nullptr }, clear_color{ DEFAULT_CLEAR_COLOR }
@@ -13,7 +14,7 @@ Level::Level(Vector2i size)
         // Initialize tiles.
         for (int x = 0; x < _size.width(); x++) {
             for (int y = 0; y < _size.height(); y++) {
-                _tiles[y * _size.x + x].set_position({x, y});
+                _tiles[y * _size.width() + x].set_position({x, y});
             }
         }
     }
@@ -33,19 +34,13 @@ Level::~Level() {
 }
 
 void Level::ready(Game* ctx) {
-    for (int y = 0; y < _size.y; y++) {
-        for (int x = 0; x < _size.x; x++) {
-            _tiles[y * _size.x + x].ready(ctx);
-        }
-    }
+    for (int i = 0; i < _size.width() * _size.height(); i++)
+        _tiles[i].ready(ctx);
 }
 
 void Level::tick() {
-    for (int y = 0; y < _size.y; y++) {
-        for (int x = 0; x < _size.x; x++) {
-            _tiles[y * _size.x + x].tick();
-        }
-    }
+    for (int i = 0; i < _size.width() * _size.height(); i++)
+        _tiles[i].tick();
 }
 
 void Level::draw() const {
@@ -67,14 +62,14 @@ Vector2i Level::get_size() const { return _size; }
 Tile* Level::get_tile(Vector2i position) const {
     if (position.x < 0 || position.y < 0)
         return nullptr;
-    if (position.x >= _size.x || position.y >= _size.y)
+    if (position.x >= _size.width() || position.y >= _size.height())
         return nullptr;
 
-    return &_tiles[position.y * _size.x + position.x];
+    return &_tiles[position.y * _size.width() + position.x];
 }
 
 std::unique_ptr<Level> Level::generate_placeholder() {
-    Vector2i lvl_size = { 20, 20 };
+    Vector2i lvl_size = { 18, 12 };
     auto lvl = std::make_unique<Level>(lvl_size);
 
     for (int x = 0; x < lvl_size.width(); x++) {
@@ -82,9 +77,9 @@ std::unique_ptr<Level> Level::generate_placeholder() {
             Tile* tile = lvl->get_tile({x, y});
 
             if (x == 0 || x == lvl_size.width() - 1 || y == 0 || y == lvl_size.height() - 1)
-                tile->get_terrain().set_sprite_id(1);
+                tile->set_terrain(std::make_unique<Wall>());
             else
-                tile->get_terrain().set_sprite_id(0);
+                tile->set_terrain(std::make_unique<Floor>());
         }
     }
 

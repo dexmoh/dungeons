@@ -41,6 +41,8 @@ target_sources(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/src/vector2i.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/atom.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/terrains/terrain.cpp
+    ${PROJECT_SOURCE_DIR}/src/atoms/terrains/floor.cpp
+    ${PROJECT_SOURCE_DIR}/src/atoms/terrains/wall.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/objects/object.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/mobs/mob.cpp
 )

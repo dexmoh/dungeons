@@ -4,7 +4,8 @@
 
 enum class TextureID {
     TEST_TILES,
-    OTHER_TILES
+    FLOORS,
+    WALLS
 };
 
 // Class for loading and storing textures.
@@ -14,7 +15,8 @@ private:
 
     inline static const std::unordered_map<TextureID, const char *> _TEXTURE_PATHS = {
         { TextureID::TEST_TILES, "test_tiles.png" },
-        { TextureID::OTHER_TILES, "test_tiles.png" }
+        { TextureID::FLOORS, "floors.png" },
+        { TextureID::WALLS, "walls.png" }
     };
 
     std::unordered_map<TextureID, Texture2D> _textures;
