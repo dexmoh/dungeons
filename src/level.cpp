@@ -8,6 +8,7 @@
 #include "atoms/terrains/floor.hpp"
 #include "atoms/terrains/wall.hpp"
 #include "atoms/mobs/player.hpp"
+#include "util/camera_bounds.hpp"
 
 Level::Level(Vector2i size, std::unique_ptr<Player> player)
     : _size{ size }, _tiles{ nullptr }, _player{ player.get() }, clear_color{ DEFAULT_CLEAR_COLOR }
@@ -77,26 +78,32 @@ void Level::update(float delta) {
         atom->update(delta);
 }
 
-void Level::draw() const {
+void Level::draw(CameraBounds bounds) const {
     // Draw terrains.
-    for (int i = 0; i < _size.width() * _size.height(); i++) {
-        Terrain* terrain = _tiles[i].get_terrain();
-        if (terrain)
-            terrain->draw();
+    for (int y = bounds.start_y; y < bounds.end_y; y++) {
+        for (int x = bounds.start_x; x < bounds.end_x; x++) {
+            Terrain* terrain = _tiles[y * _size.width() + x].get_terrain();
+            if (terrain)
+                terrain->draw();
+        }
     }
 
     // Draw objects.
-    for (int i = 0; i < _size.width() * _size.height(); i++) {
-        Object* object = _tiles[i].get_object();
-        if (object)
-            object->draw();
+    for (int y = bounds.start_y; y < bounds.end_y; y++) {
+        for (int x = bounds.start_x; x < bounds.end_x; x++) {
+            Object* object = _tiles[y * _size.width() + x].get_object();
+            if (object)
+                object->draw();
+        }
     }
 
     // Draw mobs.
-    for (int i = 0; i < _size.width() * _size.height(); i++) {
-        Mob* mob = _tiles[i].get_mob();
-        if (mob)
-            mob->draw();
+    for (int y = bounds.start_y; y < bounds.end_y; y++) {
+        for (int x = bounds.start_x; x < bounds.end_x; x++) {
+            Mob* mob = _tiles[y * _size.width() + x].get_mob();
+            if (mob)
+                mob->draw();
+        }
     }
 }
 
@@ -154,7 +161,7 @@ std::unique_ptr<Level> Level::generate_placeholder() {
     auto player = std::make_unique<Player>();
     player->set_position({ 1, 1 });
     
-    Vector2i lvl_size = { 256, 256 };
+    Vector2i lvl_size = { 50, 30 };
     auto lvl = std::make_unique<Level>(lvl_size, std::move(player));
 
     for (int x = 0; x < lvl_size.width(); x++) {

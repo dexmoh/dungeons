@@ -57,7 +57,7 @@ void Game::run() {
                 DrawLine(-2000, 0, 2000, 0, RED);
                 DrawLine(0, -2000, 0, 2000, GREEN);
 
-                _level->draw();
+                _level->draw(_camera.get_bounds());
             EndMode2D();
 
             DrawText(std::format("Delta: {}", delta).c_str(), 30, 30, 20, RED);

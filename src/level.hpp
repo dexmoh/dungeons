@@ -9,6 +9,7 @@ class Atom;
 class Terrain;
 class Object;
 class Mob;
+struct CameraBounds;
 
 class Level {
 private:
@@ -30,10 +31,10 @@ public:
     Level(Vector2i size, std::unique_ptr<Player> player);
     ~Level();
 
-    void ready(Game* ctx);    // Forwards a ready call to all atoms in the level. Called only once.
-    void tick();              // Forwards a tick call to all atoms in the level. Called every tick.
-    void update(float delta); // Forwards an update call to all atoms in the level. Called every frame.
-    void draw() const;        // Forwards draw calls to all atoms in the level in correct order. Called every frame.
+    void ready(Game* ctx);                // Forwards a ready call to all atoms in the level. Called only once.
+    void tick();                          // Forwards a tick call to all atoms in the level. Called every tick.
+    void update(float delta);             // Forwards an update call to all atoms in the level. Called every frame.
+    void draw(CameraBounds bounds) const; // Forwards draw calls to all atoms in the level in correct order. Called every frame.
 
     bool spawn_terrain(std::unique_ptr<Terrain> terrain, Vector2i position, bool force_replace = false);
     bool spawn_object(std::unique_ptr<Object> object, Vector2i position, bool force_replace = false);

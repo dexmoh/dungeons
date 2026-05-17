@@ -1,25 +1,27 @@
 #include "camera_controller.hpp"
 
 #include "game.hpp"
+#include "level.hpp"
 
 CameraController::CameraController()
-    : _ctx{ nullptr }, _camera{ 0.0f }, _position { Vector2i::ZERO }
+    : _ctx{ nullptr }, _camera{ 0.0f }, _position { Vector2i::ZERO }, _bounds{ 0 }
 {}
 
 void CameraController::init(Game* ctx) {
     _ctx = ctx;
 
-    recenter();
+    _recenter();
     set_position(_position);
 
     _camera.rotation = 0.0f;
     _camera.zoom = DEFAULT_ZOOM;
+
+    _recalculate_bounds();
 }
 
 void CameraController::update(float delta) {
-    // Check if window resized;
     if (IsWindowResized())
-        recenter();
+        _recenter();
 
     // Handle movement.
     if (IsKeyPressed(KEY_UP)) {
@@ -49,18 +51,66 @@ void CameraController::update(float delta) {
             if (_camera.zoom > MAX_ZOOM)
                 _camera.zoom = MAX_ZOOM;
         }
+
+        _recalculate_bounds();
     }
 }
 
-void CameraController::recenter() {
+void CameraController::_recenter() {
     _camera.offset = (Vector2) {
         GetScreenWidth() / 2.0f,
         GetScreenHeight() / 2.0f
     };
+
+    _recalculate_bounds();
 }
 
-Camera2D CameraController::get_rl_camera() const { return _camera; }
-float CameraController::get_rotation() const { return _camera.rotation; }
+void CameraController::_recalculate_bounds() {
+    Vector2i tile_size = _ctx->get_tile_size();
+
+    Vector2 world_btm_left = GetScreenToWorld2D(
+        { 0, float(GetScreenHeight()) }, _camera
+    );
+    world_btm_left.y = -world_btm_left.y;
+
+    Vector2 world_top_right = GetScreenToWorld2D(
+        { float(GetScreenWidth()), 0 }, _camera
+    );
+    world_top_right.y = -world_top_right.y;
+
+    _bounds = {
+        int(world_btm_left.x / tile_size.width()),
+        int(world_btm_left.y / tile_size.height()),
+        int(world_top_right.x / tile_size.width()),
+        int(world_top_right.y / tile_size.height())
+    };
+
+    // Add a 1 tile buffer around the bounding box.
+    _bounds.start_x -= 1;
+    _bounds.start_y -= 1;
+    _bounds.end_x += 1;
+    _bounds.end_y += 1;
+
+    // Clamp bounding box.
+    _bounds.start_x = (_bounds.start_x < 0) ? 0 : _bounds.start_x;
+    _bounds.start_y = (_bounds.start_y < 0) ? 0 : _bounds.start_y;
+
+    if (_ctx->get_level()) {
+        Vector2i lvl_size = _ctx->get_level()->get_size();
+
+        _bounds.end_x = (_bounds.end_x > lvl_size.width()) ? lvl_size.width() : _bounds.end_x;
+        _bounds.end_y = (_bounds.end_y > lvl_size.height()) ? lvl_size.height() : _bounds.end_y;
+    }
+}
+
+/* Getters & Setters */
+Camera2D CameraController::get_rl_camera() const {
+    return _camera;
+}
+
+CameraBounds CameraController::get_bounds() const {
+    return _bounds;
+}
 
 void CameraController::set_position(Vector2i position) {
     _position = position;
@@ -70,6 +120,6 @@ void CameraController::set_position(Vector2i position) {
         _position.x * tile_size.width() + (tile_size.width() / 2.0f),
         -_position.y * tile_size.height() - (tile_size.height() / 2.0f)
     };
-}
 
-void CameraController::set_rotation(float new_rotation) { _camera.rotation = new_rotation; }
+    _recalculate_bounds();
+}
