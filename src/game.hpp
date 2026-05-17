@@ -11,6 +11,7 @@ class Game {
 private:
     std::unique_ptr<Level> _level; // Currently loaded level.
     TextureManager _tex_manager;   // Texture storage.
+    RandomNumberGenerator _rng;    // Main RNG used by the game.
     CameraController _camera;      // Main camera.
     Vector2i _tile_size;           // Size of tiles in pixels.
     float _tps;                    // Tick rate.
@@ -28,7 +29,8 @@ public:
     void run();
 
     Level* get_level();
-    const TextureManager& get_tex_manager() const;
+    TextureManager& get_tex_manager();
+    RandomNumberGenerator& get_rng();
     Vector2i get_tile_size() const;
     float get_tps() const;
 
