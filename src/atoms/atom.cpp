@@ -55,6 +55,7 @@ void Atom::draw() const {
 
 /* Getters & Setters */
 Vector2i Atom::get_position() const { return _position; }
+float Atom::get_rotation() const { return _rotation; }
 bool Atom::get_solid() const { return _solid; }
 bool Atom::get_visibility() const { return _visible; }
 
@@ -73,6 +74,10 @@ void Atom::set_position(Vector2i position) {
         float(tile_size.height()),
         float(tile_size.width())
     };
+}
+
+void Atom::set_rotation(float rotation) {
+    _rotation = rotation;
 }
 
 void Atom::set_solid(bool solid) {

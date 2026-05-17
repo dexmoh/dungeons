@@ -2,7 +2,7 @@
 
 #include "pch.hpp"
 
-class Game;
+class Level;
 class Terrain;
 class Object;
 class Mob;
@@ -12,33 +12,26 @@ class Tile {
 private:
     Vector2i _position;
 
-    std::unique_ptr<Terrain> _terrain;
-    std::vector<std::unique_ptr<Object>> _objects;
-    std::unique_ptr<Mob> _mob;
+    Terrain* _terrain;
+    Object* _object;
+    Mob* _mob;
+
+    void _set_position(Vector2i position);
+    void _set_terrain(Terrain* terrain);
+    void _set_object(Object* object);
+    void _set_mob(Mob* mob);
 
 public:
     Tile();
     Tile(Vector2i position);
-    ~Tile();
 
-    // Forwards a ready call to all atoms belonging to the tile. Called only once.
-    void ready(Game* ctx);
-
-    // Forwards a tick call to all atoms belonging to the tile. Called every tick.
-    void tick();
-
-    // Forwards an update call to all atoms belonging to the tile. Called every frame.
-    void update(float delta);
-
-    void draw_terrain() const; // Forward a draw call to tile's terrain.
-    void draw_objects() const; // Forward a draw call to tile's stored objects.
-    void draw_mob() const;     // Forward a draw call to a mob that occupies the tile.
+    bool is_solid() const;
 
     Vector2i get_position() const;
     Terrain* get_terrain();
-    // const std::vector<std::unique_ptr<Object>>& get_objects() const;
+    Object* get_object();
+    Mob* get_mob();
 
-    void set_position(Vector2i position);
-    void set_terrain(std::unique_ptr<Terrain> terrain);
+    friend class Level;
 
 };

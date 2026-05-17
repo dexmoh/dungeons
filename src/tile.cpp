@@ -1,90 +1,57 @@
 #include "tile.hpp"
 
-#include "game.hpp"
 #include "atoms/terrains/terrain.hpp"
 #include "atoms/objects/object.hpp"
 #include "atoms/mobs/mob.hpp"
 
 Tile::Tile()
-    : _position{ Vector2i::ZERO }
+    : Tile(Vector2i::ZERO)
 {}
 
 Tile::Tile(Vector2i position)
-    : _position{ position }
-{
-    if (_terrain)
-        _terrain->set_position(_position);
-}
-
-Tile::~Tile()
+    : _position{ position }, _terrain{ nullptr }, _object{ nullptr }, _mob{ nullptr}
 {}
 
-void Tile::ready(Game* ctx) {
-    if (_terrain)
-        _terrain->ready(ctx);
-    
-    for (auto& obj : _objects)
-        if (obj)
-            obj->ready(ctx);
+bool Tile::is_solid() const {
+    if (_terrain && _terrain->get_solid())
+        return true;
+
+    if (_object && _object->get_solid())
+        return true;
 
     if (_mob)
-        _mob->ready(ctx);
-}
+        return true;
 
-void Tile::tick() {
-    if (_terrain)
-        _terrain->tick();
-
-    for (auto& obj : _objects)
-        if (obj)
-            obj->tick();
-
-    if (_mob)
-        _mob->tick();
-}
-
-void Tile::update(float delta) {
-    if (_terrain)
-        _terrain->update(delta);
-    
-    for (auto& obj : _objects)
-        if (obj)
-            obj->update(delta);
-
-    if (_mob)
-        _mob->update(delta);
-}
-
-void Tile::draw_terrain() const {
-    if (_terrain)
-        _terrain->draw();
-}
-
-void Tile::draw_objects() const {
-    for (const auto& obj : _objects)
-        if (obj)
-            obj->draw();
-}
-
-void Tile::draw_mob() const {
-    if (_mob)
-        _mob->draw();
+    return false;
 }
 
 /* Getters & Setters */
 Vector2i Tile::get_position() const { return _position; }
-Terrain* Tile::get_terrain() { return _terrain.get(); }
+Terrain* Tile::get_terrain() { return _terrain; }
+Object* Tile::get_object() { return _object; }
+Mob* Tile::get_mob() { return _mob; }
 
-void Tile::set_position(Vector2i position) {
+void Tile::_set_position(Vector2i position) {
     _position = position;
+}
+
+void Tile::_set_terrain(Terrain* terrain) {
+    _terrain = terrain;
 
     if (_terrain)
         _terrain->set_position(_position);
 }
 
-void Tile::set_terrain(std::unique_ptr<Terrain> terrain) {
-    _terrain = std::move(terrain);
+void Tile::_set_object(Object* object) {
+    _object = object;
 
-    if (_terrain)
-        _terrain->set_position(_position);
+    if (_object)
+        _object->set_position(_position);
+}
+
+void Tile::_set_mob(Mob* mob) {
+    _mob = mob;
+
+    if (_mob)
+        _mob->set_position(_position);
 }

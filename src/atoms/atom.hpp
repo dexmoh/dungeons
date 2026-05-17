@@ -45,10 +45,12 @@ public:
 
     /* Getters & Setters */
     Vector2i get_position() const;
+    float get_rotation() const;
     bool get_solid() const;
     bool get_visibility() const;
 
     void set_position(Vector2i position);
+    void set_rotation(float rotation);
     void set_solid(bool solid);
     void set_visibility(bool visible);
     void set_texture_id(TextureID id);

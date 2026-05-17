@@ -45,6 +45,9 @@ target_sources(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/src/atoms/terrains/wall.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/objects/object.cpp
     ${PROJECT_SOURCE_DIR}/src/atoms/mobs/mob.cpp
+    ${PROJECT_SOURCE_DIR}/src/atoms/mobs/player.cpp
+    ${PROJECT_SOURCE_DIR}/src/behaviors/mob_behavior.cpp
+    ${PROJECT_SOURCE_DIR}/src/behaviors/player_behavior.cpp
 )
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE

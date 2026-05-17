@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include <format>
+#include <new>
 
 #include "raylib.h"
 #include "vector2i.hpp"

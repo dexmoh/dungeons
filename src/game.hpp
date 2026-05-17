@@ -27,6 +27,7 @@ public:
 
     void run();
 
+    Level* get_level();
     const TextureManager& get_tex_manager() const;
     Vector2i get_tile_size() const;
     float get_tps() const;

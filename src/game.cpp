@@ -67,6 +67,7 @@ void Game::run() {
 }
 
 /* Getters & Setters */
+Level* Game::get_level() { return _level.get(); }
 const TextureManager& Game::get_tex_manager() const { return _tex_manager; }
 Vector2i Game::get_tile_size() const { return _tile_size; }
 float Game::get_tps() const { return _tps; }
