@@ -9,7 +9,7 @@ enum class TextureID;
 class Atom {
 private:
     Vector2i _position; // Atom's x and y position in the tile grid.
-    Vector2i _offset;   // Offset from atom's position in pixels. // TODO: This hasn't been implemented yet.
+    Vector2 _offset;   // Offset from atom's position in pixels.
     float _rotation;    // Sprite rotation with the origin in the center.
     Color _tint;        // Color tint applied to the atom texture.
     bool _solid;        // Whether the atom is solid or not.
@@ -45,11 +45,13 @@ public:
 
     /* Getters & Setters */
     Vector2i get_position() const;
+    Vector2 get_offset() const;
     float get_rotation() const;
     bool get_solid() const;
     bool get_visibility() const;
 
     void set_position(Vector2i position);
+    void set_offset(Vector2 offset);
     void set_rotation(float rotation);
     void set_solid(bool solid);
     void set_visibility(bool visible);

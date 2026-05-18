@@ -8,7 +8,7 @@ Atom::Atom()
       _name{ "Atom" },
       _description{ "You shouldn't be seeing this." },
       _position{ Vector2i::ZERO },
-      _offset{ Vector2i::ZERO },
+      _offset{ 0.0f, 0.0f },
       _rotation{ 0.0f },
       _tint{ WHITE },
       _solid{ false },
@@ -55,6 +55,7 @@ void Atom::draw() const {
 
 /* Getters & Setters */
 Vector2i Atom::get_position() const { return _position; }
+Vector2 Atom::get_offset() const { return _offset; }
 float Atom::get_rotation() const { return _rotation; }
 bool Atom::get_solid() const { return _solid; }
 bool Atom::get_visibility() const { return _visible; }
@@ -67,13 +68,20 @@ void Atom::set_position(Vector2i position) {
 
     Vector2i tile_size = _ctx->get_tile_size();
 
-    // Recalculate sprite destination based on new position.
+    // Recalculate sprite destination based on new position and offset.
     _sprite_dest = {
-        float(_position.x * tile_size.width()) + (tile_size.width() / 2.0f),
-        float(_position.y * -tile_size.height() - tile_size.height()) + (tile_size.height() / 2.0f),
+        float(_position.x * tile_size.width()) + (tile_size.width() / 2.0f) + _offset.x,
+        float(_position.y * -tile_size.height() - tile_size.height()) + (tile_size.height() / 2.0f) - _offset.y,
         float(tile_size.height()),
         float(tile_size.width())
     };
+}
+
+void Atom::set_offset(Vector2 offset) {
+    _offset = offset;
+
+    // Recalculate sprite destination with the new offset value.
+    set_position(_position);
 }
 
 void Atom::set_rotation(float rotation) {
