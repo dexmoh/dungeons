@@ -205,3 +205,7 @@ Tile* Level::get_tile(Vector2i position) const {
 
     return &_tiles[position.y * _size.width() + position.x];
 }
+
+Player* Level::get_player() {
+    return _player;
+}

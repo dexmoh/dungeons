@@ -3,35 +3,37 @@
 #include "atoms/mobs/mob.hpp"
 
 PlayerBehavior::PlayerBehavior(Mob* mob)
-    : MobBehavior(mob), is_rotating{ false }
+    : MobBehavior(mob)
 {}
 
 void PlayerBehavior::update(float delta) {
-    // Handle movement.
-    if (IsKeyPressed(KEY_W)) {
-        _mob->move(_mob->get_position() + Vector2i::UP);
-    }
-    else if (IsKeyPressed(KEY_S)) {
-        _mob->move(_mob->get_position() + Vector2i::DOWN);
-    }
-    else if (IsKeyPressed(KEY_A)) {
-        _mob->move(_mob->get_position() + Vector2i::LEFT);
-    }
-    else if (IsKeyPressed(KEY_D)) {
-        _mob->move(_mob->get_position() + Vector2i::RIGHT);
-    }
-    else if (IsKeyPressed(KEY_R)) {
-        is_rotating = true;
-    }
+    if (_mob->is_moving())
+        return;
 
-    if (is_rotating) {
-        float rotation = _mob->get_rotation();
-        if (rotation > 360.0f) {
-            is_rotating = false;
-            _mob->set_rotation(0.0f);
-        }
-        else {
-            _mob->set_rotation(rotation + 600.0f * delta);
-        }
-    }
+    // Handle movement.
+    bool up = IsKeyDown(KEY_UP) || IsKeyDown(KEY_KP_8);
+    bool down = IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_KP_2);
+    bool left = IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_KP_4);
+    bool right = IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_KP_6);
+    bool up_left = IsKeyDown(KEY_KP_7) || (up && left);
+    bool up_right = IsKeyDown(KEY_KP_9) || (up && right);
+    bool down_left = IsKeyDown(KEY_KP_1) || (down && left);
+    bool down_right = IsKeyDown(KEY_KP_3) || (down && right);
+
+    if (up_left)
+        _mob->try_move(MoveDir::UP_LEFT);
+    else if (up_right)
+        _mob->try_move(MoveDir::UP_RIGHT);
+    else if (down_left)
+        _mob->try_move(MoveDir::DOWN_LEFT);
+    else if (down_right)
+        _mob->try_move(MoveDir::DOWN_RIGHT);
+    else if (up)
+        _mob->try_move(MoveDir::UP);
+    else if (down)
+        _mob->try_move(MoveDir::DOWN);
+    else if (left)
+        _mob->try_move(MoveDir::LEFT);
+    else if (right)
+        _mob->try_move(MoveDir::RIGHT);
 }

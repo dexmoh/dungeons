@@ -3,5 +3,5 @@
 #include "behaviors/player_behavior.hpp"
 
 Player::Player() {
-    _behavior = std::make_unique<PlayerBehavior>(this);
+    set_behavior(std::make_unique<PlayerBehavior>(this));
 }

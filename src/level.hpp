@@ -47,5 +47,6 @@ public:
 
     Vector2i get_size() const;               // Get level size.
     Tile* get_tile(Vector2i position) const; // Get a tile from the level grid.
+    Player* get_player();                    // Get the player atom.
 
 };
