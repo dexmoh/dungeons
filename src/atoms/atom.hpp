@@ -21,6 +21,11 @@ private:
     Vector2 _sprite_origin; // Origin point of the sprite.
     TextureID _texture_id;  // ID of the texture that needs to be loaded.
     int _sprite_id;         // ID of the sprite stored in the texture resource.
+    bool _flip_h;           // Set to true if the sprite is flipped horizontally.
+    bool _flip_v;           // Set to true if the sprite is flipped vertically.
+
+private:
+    void _recalculate_sprite_dest();
 
 protected:
     Game* _ctx; // Game context.
@@ -49,6 +54,8 @@ public:
     float get_rotation() const;
     bool get_solid() const;
     bool get_visibility() const;
+    bool get_flip_h() const;
+    bool get_flip_v() const;
 
     void set_position(Vector2i position);
     void set_offset(Vector2 offset);
@@ -57,5 +64,7 @@ public:
     void set_visibility(bool visible);
     void set_texture_id(TextureID id);
     void set_sprite_id(int id);
+    void set_flip_h(bool flip_h);
+    void set_flip_v(bool flip_v);
 
 };

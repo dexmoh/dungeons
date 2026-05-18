@@ -15,7 +15,9 @@ Atom::Atom()
       _visible{ true },
       _sprite_origin{ 0.0f, 0.0f },
       _texture_id{ TextureID::TEST_TILES },
-      _sprite_id{ SpriteID::DEFAULT_TILE }
+      _sprite_id{ SpriteID::DEFAULT_TILE },
+      _flip_h{ false },
+      _flip_v{ false }
 {}
 
 Atom::~Atom()
@@ -26,7 +28,7 @@ void Atom::ready(Game* ctx) {
 
     set_texture_id(_texture_id);
     set_sprite_id(_sprite_id);
-    set_position(_position);
+    _recalculate_sprite_dest();
 
     // Initial sprite origin.
     Vector2i tile_size = _ctx->get_tile_size();
@@ -53,22 +55,12 @@ void Atom::draw() const {
     );
 }
 
-/* Getters & Setters */
-Vector2i Atom::get_position() const { return _position; }
-Vector2 Atom::get_offset() const { return _offset; }
-float Atom::get_rotation() const { return _rotation; }
-bool Atom::get_solid() const { return _solid; }
-bool Atom::get_visibility() const { return _visible; }
-
-void Atom::set_position(Vector2i position) {
-    _position = position;
-
+void Atom::_recalculate_sprite_dest() {
     if (!_ctx)
         return;
 
     Vector2i tile_size = _ctx->get_tile_size();
 
-    // Recalculate sprite destination based on new position and offset.
     _sprite_dest = {
         float(_position.x * tile_size.width()) + (tile_size.width() / 2.0f) + _offset.x,
         float(_position.y * -tile_size.height() - tile_size.height()) + (tile_size.height() / 2.0f) - _offset.y,
@@ -77,11 +69,23 @@ void Atom::set_position(Vector2i position) {
     };
 }
 
+/* Getters & Setters */
+Vector2i Atom::get_position() const { return _position; }
+Vector2 Atom::get_offset() const { return _offset; }
+float Atom::get_rotation() const { return _rotation; }
+bool Atom::get_solid() const { return _solid; }
+bool Atom::get_visibility() const { return _visible; }
+bool Atom::get_flip_h() const { return _flip_h; }
+bool Atom::get_flip_v() const { return _flip_v; }
+
+void Atom::set_position(Vector2i position) {
+    _position = position;
+    _recalculate_sprite_dest();
+}
+
 void Atom::set_offset(Vector2 offset) {
     _offset = offset;
-
-    // Recalculate sprite destination with the new offset value.
-    set_position(_position);
+    _recalculate_sprite_dest();
 }
 
 void Atom::set_rotation(float rotation) {
@@ -121,4 +125,26 @@ void Atom::set_sprite_id(int id) {
         float(tile_size.width()),
         float(tile_size.height())
     };
+
+    if (_flip_h)
+        _texture_src.width = -_texture_src.width;
+
+    if (_flip_v)
+        _texture_src.height = -_texture_src.height;
+}
+
+void Atom::set_flip_h(bool flip_h) {
+    if (_flip_h == flip_h)
+        return;
+
+    _flip_h = flip_h;
+    _texture_src.width = -_texture_src.width;
+}
+
+void Atom::set_flip_v(bool flip_v) {
+    if (_flip_v == flip_v)
+        return;
+
+    _flip_v = flip_v;
+    _texture_src.height = -_texture_src.height;;
 }
