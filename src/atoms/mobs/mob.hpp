@@ -8,6 +8,8 @@ class Mob : public Atom {
 private:
     float _movement_speed;    // Mob's movement speed (in tiles/sec).
     float _movement_cooldown; // Used to prevent the mob from moving again if it is already moving.
+    float _movement_duration; // The amount of time (in seconds) that last movement took.
+    Vector2 _initial_offset;  // Initial offset at the start of the movement. Used for animating movement transitions.
     bool _is_moving;          // Set to true if the mob is currently moving.
     float _flip_speed;        // Flip speed (in deg/sec).
     bool _is_flipping;        // Set to true if the mob is currently doing a flip.

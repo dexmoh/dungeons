@@ -2,6 +2,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <algorithm>
 #include <iostream>
 #include <cstdint>
 #include <memory>

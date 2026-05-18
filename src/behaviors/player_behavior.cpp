@@ -7,6 +7,9 @@ PlayerBehavior::PlayerBehavior(Mob* mob)
 {}
 
 void PlayerBehavior::update(float delta) {
+    if (IsKeyPressed(KEY_R))
+        _mob->flip();
+
     if (_mob->is_moving())
         return;
 

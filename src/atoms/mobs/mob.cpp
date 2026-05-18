@@ -7,6 +7,8 @@
 Mob::Mob()
     : _movement_speed{ _DEFAULT_MOVEMENT_SPEED },
       _movement_cooldown{ 0.0f },
+      _movement_duration{ 0.0f },
+      _initial_offset{ 0.0f, 0.0f },
       _is_moving{ false },
       _flip_speed{ _DEFAULT_FLIP_SPEED },
       _is_flipping{ false }
@@ -28,8 +30,16 @@ void Mob::update(float delta) {
     // Update movement cooldown if we are moving.
     if (_is_moving) {
         _movement_cooldown -= delta;
+
+        float t = std::max(_movement_cooldown / _movement_duration, 0.0f);
+        set_offset({
+            std::lerp(0.0f, _initial_offset.x, t),
+            std::lerp(0.0f, _initial_offset.y, t)
+        });
+
         if (_movement_cooldown <= 0.0f) {
             _movement_cooldown = 0.0f;
+            set_offset({ 0.0f, 0.0f });
             _is_moving = false;
         }
     }
@@ -63,8 +73,16 @@ bool Mob::try_move(MoveDir dir) {
 
     bool success = level->move_mob(this, get_position() + move_vec);
     if (success) {
-        _movement_cooldown = (1.0f / _movement_speed) * move_vec.length();
+        _movement_duration = (1.0f / _movement_speed) * move_vec.length();
+        _movement_cooldown = _movement_duration;
         _is_moving = true;
+
+        Vector2i tile_size = _ctx->get_tile_size();
+        _initial_offset = {
+            float(-move_vec.x * tile_size.width()),
+            float(-move_vec.y * tile_size.height())
+        };
+        set_offset(_initial_offset);
 
         if (move_vec.x < 0)
             set_flip_h(false);
