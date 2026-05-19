@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include <format>
+#include <chrono>
 #include <cmath>
 #include <new>
 
@@ -16,4 +17,5 @@
 
 #include "util/vector2i.hpp"
 #include "util/move_dir.hpp"
+#include "util/log.hpp"
 #include "util/rng.hpp"

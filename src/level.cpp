@@ -14,11 +14,11 @@ Level::Level(Vector2i size, std::unique_ptr<Player> player)
     : _size{ size }, _tiles{ nullptr }, _player{ *(player.get()) }, clear_color{ DEFAULT_CLEAR_COLOR }
 {
     if (_size.width() < 1 || _size.height() < 1) {
-        // TODO: Throw a proper error or something.
-        std::cout
-            << "ERROR: Couldn't initialize a new level, size of the level was invalid."
-            << std::endl;
-
+        Log::write(
+            "Couldn't initialize a new level because the provided level size was invalid.",
+            Log::Level::FATAL
+        );
+        std::exit(EXIT_FAILURE);
         return;
     }
 
@@ -26,11 +26,11 @@ Level::Level(Vector2i size, std::unique_ptr<Player> player)
     _tiles = new(std::nothrow) Tile[total_num_of_tiles];
 
     if (!_tiles) {
-        // TODO: Here too.
-        std::cout
-            << "ERROR: Failed to allocate memory while trying to initialize a new level."
-            << std::endl;
-
+        Log::write(
+            "Failed to allocate enough memory while trying to initialize a new level.",
+            Log::Level::FATAL
+        );
+        std::exit(EXIT_FAILURE);
         return;
     }
 
@@ -43,12 +43,15 @@ Level::Level(Vector2i size, std::unique_ptr<Player> player)
 
     Tile* tile = get_tile(player->get_position());
     if (!tile) {
-        // TODO: And here...
-        std::cout
-            << "ERROR: Failed to spawn a player while initializing the level."
-            << std::endl;
-
-        return;
+        Log::write(
+            std::format(
+                "Failed to spawn the player at position [{}, {}] while initializing a new level.",
+                player->get_position().x, player->get_position().y
+            ),
+            Log::Level::ERROR
+        );
+        player->set_position({0, 0});
+        tile = get_tile(player->get_position());
     }
 
     tile->_set_mob(player.get());
