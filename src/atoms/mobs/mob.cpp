@@ -14,7 +14,7 @@ Mob::Mob()
       _is_flipping{ false }
 {}
 
-void Mob::ready(Game* ctx) {
+void Mob::ready(Game& ctx) {
     Atom::ready(ctx);
 
     if (_behavior)
@@ -71,7 +71,7 @@ bool Mob::try_move(MoveDir dir) {
     if (move_vec.is_zero())
         return false;
 
-    bool success = level->move_mob(this, get_position() + move_vec);
+    bool success = level->move_mob(*this, get_position() + move_vec);
     if (success) {
         _movement_duration = (1.0f / _movement_speed) * move_vec.length();
         _movement_cooldown = _movement_duration;

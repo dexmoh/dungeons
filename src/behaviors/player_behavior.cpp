@@ -1,10 +1,18 @@
 #include "behaviors/player_behavior.hpp"
 
-#include "atoms/mobs/mob.hpp"
+#include "game.hpp"
+#include "atoms/mobs/player.hpp"
+#include "camera_controller.hpp"
 
-PlayerBehavior::PlayerBehavior(Mob* mob)
-    : MobBehavior(mob)
+PlayerBehavior::PlayerBehavior(Mob& mob)
+    : MobBehavior(mob),
+      _camera{ nullptr }
 {}
+
+void PlayerBehavior::ready(Game& ctx) {
+    MobBehavior::ready(ctx);
+    _camera = &(ctx.get_camera());
+}
 
 void PlayerBehavior::update(float delta) {
     if (IsKeyPressed(KEY_R))

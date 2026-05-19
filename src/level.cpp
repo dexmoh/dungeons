@@ -11,7 +11,7 @@
 #include "util/camera_bounds.hpp"
 
 Level::Level(Vector2i size, std::unique_ptr<Player> player)
-    : _size{ size }, _tiles{ nullptr }, _player{ player.get() }, clear_color{ DEFAULT_CLEAR_COLOR }
+    : _size{ size }, _tiles{ nullptr }, _player{ *(player.get()) }, clear_color{ DEFAULT_CLEAR_COLOR }
 {
     if (_size.width() < 1 || _size.height() < 1) {
         // TODO: Throw a proper error or something.
@@ -63,7 +63,7 @@ Level::~Level() {
     }
 }
 
-void Level::ready(Game* ctx) {
+void Level::ready(Game& ctx) {
     for (auto& atom : _atoms)
         atom->ready(ctx);
 }
@@ -120,7 +120,7 @@ bool Level::spawn_terrain(std::unique_ptr<Terrain> terrain, Vector2i position, b
         if (!force_replace)
             return false;
 
-        int old_terrain_index = _find_atom(old_terrain);
+        int old_terrain_index = _find_atom(*old_terrain);
 
         if (old_terrain_index >= 0)
             _atoms.erase(_atoms.begin() + old_terrain_index);
@@ -142,17 +142,17 @@ bool Level::spawn_mob(std::unique_ptr<Mob> mob, Vector2i position, bool force_re
     return false;
 }
 
-bool Level::move_mob(Mob* mob, Vector2i dest) {
+bool Level::move_mob(Mob& mob, Vector2i dest) {
     Tile* dest_tile = get_tile(dest);
     if (!dest_tile || dest_tile->is_solid())
         return false;
 
-    Tile* src_tile = get_tile(mob->get_position());
+    Tile* src_tile = get_tile(mob.get_position());
     if (!src_tile)
         return false;
 
     src_tile->_set_mob(nullptr);
-    dest_tile->_set_mob(mob);
+    dest_tile->_set_mob(&mob);
 
     return true;
 }
@@ -176,14 +176,10 @@ std::unique_ptr<Level> Level::generate_placeholder() {
     return lvl;
 }
 
-int Level::_find_atom(Atom* atom) const {
-    if (!atom)
-        return -1;
-
+int Level::_find_atom(const Atom& atom) const {
     int result = -1;
-
     for (int i = 0; i < _atoms.size(); i++) {
-        if (_atoms[i].get() == atom) {
+        if (_atoms[i].get() == &atom) {
             result = i;
             break;
         }
@@ -206,6 +202,6 @@ Tile* Level::get_tile(Vector2i position) const {
     return &_tiles[position.y * _size.width() + position.x];
 }
 
-Player* Level::get_player() {
+Player& Level::get_player() {
     return _player;
 }

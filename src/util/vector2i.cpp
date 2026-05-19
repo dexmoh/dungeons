@@ -87,6 +87,14 @@ Vector2i Vector2i::move_dir_to_vec(MoveDir dir) {
 }
 
 /* Operator overloads. */
+bool Vector2i::operator==(const Vector2i& other) const {
+    return (x == other.x) && (y == other.y);
+}
+
+bool Vector2i::operator!=(const Vector2i& other) const {
+    return !(*this == other);
+}
+
 Vector2i Vector2i::operator+(const Vector2i& other) const {
     return Vector2i(x + other.x, y + other.y);
 }

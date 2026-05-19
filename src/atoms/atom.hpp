@@ -41,7 +41,7 @@ public:
     Atom();
     ~Atom();
 
-    virtual void ready(Game* ctx);    // Called when the atom is ready to begin being processed.
+    virtual void ready(Game& ctx);    // Called when the atom is ready to begin being processed.
     virtual void tick();              // Called every tick.
     virtual void update(float delta); // Called every frame.
 

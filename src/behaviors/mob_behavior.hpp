@@ -11,9 +11,9 @@ protected:
     Game* _ctx;
 
 public:
-    MobBehavior(Mob* mob);
+    MobBehavior(Mob& mob);
 
-    virtual void ready(Game* ctx);
+    virtual void ready(Game& ctx);
     virtual void tick();
     virtual void update(float delta);
 

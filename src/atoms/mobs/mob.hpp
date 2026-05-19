@@ -22,7 +22,7 @@ private:
 public:
     Mob();
 
-    void ready(Game* ctx) override;
+    void ready(Game& ctx) override;
     void tick() override;
     void update(float delta) override;
 

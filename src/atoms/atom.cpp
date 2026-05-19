@@ -23,8 +23,8 @@ Atom::Atom()
 Atom::~Atom()
 {}
 
-void Atom::ready(Game* ctx) {
-    _ctx = ctx;
+void Atom::ready(Game& ctx) {
+    _ctx = &ctx;
 
     set_texture_id(_texture_id);
     set_sprite_id(_sprite_id);

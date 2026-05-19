@@ -31,6 +31,7 @@ public:
     Level* get_level();
     TextureManager& get_tex_manager();
     RandomNumberGenerator& get_rng();
+    CameraController& get_camera();
     Vector2i get_tile_size() const;
     float get_tps() const;
 

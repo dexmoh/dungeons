@@ -1,14 +1,20 @@
 #include "camera_controller.hpp"
 
 #include "game.hpp"
+#include "atoms/atom.hpp"
 #include "level.hpp"
 
 CameraController::CameraController()
-    : _ctx{ nullptr }, _camera{ 0.0f }, _position { Vector2i::ZERO }, _bounds{ 0 }
+    : _ctx{ nullptr },
+      _target{ nullptr },
+      _camera{ 0.0f },
+      _position { Vector2i::ZERO },
+      _offset { 0.0f, 0.0f },
+      _bounds{ 0 }
 {}
 
-void CameraController::init(Game* ctx) {
-    _ctx = ctx;
+void CameraController::init(Game& ctx) {
+    _ctx = &ctx;
 
     _recenter();
     set_position(_position);
@@ -23,18 +29,11 @@ void CameraController::update(float delta) {
     if (IsWindowResized())
         _recenter();
 
-    // Handle movement.
-    if (IsKeyPressed(KEY_UP)) {
-        set_position(_position + Vector2i::UP);
-    }
-    else if (IsKeyPressed(KEY_DOWN)) {
-        set_position(_position + Vector2i::DOWN);
-    }
-    else if (IsKeyPressed(KEY_LEFT)) {
-        set_position(_position + Vector2i::LEFT);
-    }
-    else if (IsKeyPressed(KEY_RIGHT)) {
-        set_position(_position + Vector2i::RIGHT);
+    if (_target) {
+        set_offset(_target->get_offset(), false);
+
+        if (_target->get_position() != _position)
+            set_position(_target->get_position());
     }
 
     // Handle zoom.
@@ -88,8 +87,8 @@ void CameraController::_recalculate_bounds() {
     // Add a 1 tile buffer around the bounding box.
     _bounds.start_x -= 1;
     _bounds.start_y -= 1;
-    _bounds.end_x += 1;
-    _bounds.end_y += 1;
+    _bounds.end_x += 2;
+    _bounds.end_y += 2;
 
     // Clamp bounding box.
     _bounds.start_x = (_bounds.start_x < 0) ? 0 : _bounds.start_x;
@@ -104,22 +103,28 @@ void CameraController::_recalculate_bounds() {
 }
 
 /* Getters & Setters */
-Camera2D CameraController::get_rl_camera() const {
-    return _camera;
+Atom* CameraController::get_target() { return _target; }
+Camera2D CameraController::get_rl_camera() const { return _camera; }
+CameraBounds CameraController::get_bounds() const { return _bounds; }
+
+void CameraController::set_target(Atom* target) {
+    _target = target;
 }
 
-CameraBounds CameraController::get_bounds() const {
-    return _bounds;
-}
-
-void CameraController::set_position(Vector2i position) {
+void CameraController::set_position(Vector2i position, bool recalculate_bounds) {
     _position = position;
     Vector2i tile_size = _ctx->get_tile_size();
 
-    _camera.target = (Vector2) {
-        _position.x * tile_size.width() + (tile_size.width() / 2.0f),
-        -_position.y * tile_size.height() - (tile_size.height() / 2.0f)
+    _camera.target = {
+        _position.x * tile_size.width() + (tile_size.width() / 2.0f) + _offset.x,
+        -_position.y * tile_size.height() - (tile_size.height() / 2.0f) - _offset.y
     };
 
-    _recalculate_bounds();
+    if (recalculate_bounds)
+        _recalculate_bounds();
+}
+
+void CameraController::set_offset(Vector2 offset, bool recalculate_bounds) {
+    _offset = offset;
+    set_position(_position, recalculate_bounds);
 }

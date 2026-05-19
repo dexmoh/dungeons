@@ -40,6 +40,9 @@ public:
     static Vector2i move_dir_to_vec(MoveDir dir);
 
     /* Operator overloads. */
+    bool operator==(const Vector2i& other) const;
+    bool operator!=(const Vector2i& other) const;
+
     Vector2i operator+(const Vector2i& other) const;
     Vector2i& operator+=(const Vector2i& other);
 

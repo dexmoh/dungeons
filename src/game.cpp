@@ -2,6 +2,7 @@
 
 #include "level.hpp"
 #include "camera_controller.hpp"
+#include "atoms/mobs/player.hpp"
 
 Game::Game()
     : _tile_size{ _DEFAULT_TILE_SIZE, _DEFAULT_TILE_SIZE },
@@ -17,7 +18,7 @@ Game::Game()
     _tex_manager.init();
 
     // Initialize camera.
-    _camera.init(this);
+    _camera.init(*this);
 }
 
 Game::~Game() {
@@ -28,7 +29,8 @@ void Game::run() {
     // Load a level.
     if (!_level)
         _level = Level::generate_placeholder();
-        _level->ready(this);
+    _level->ready(*this);
+    _camera.set_target(&(_level->get_player()));
 
     float tick_counter = 0.0f;
 
@@ -44,8 +46,8 @@ void Game::run() {
         }
 
         // Update calls.
-        _camera.update(delta);
         _level->update(delta);
+        _camera.update(delta);
 
         // Draw to the screen.
         BeginDrawing();
@@ -70,6 +72,7 @@ void Game::run() {
 Level* Game::get_level() { return _level.get(); }
 TextureManager& Game::get_tex_manager() { return _tex_manager; }
 RandomNumberGenerator& Game::get_rng() { return _rng; }
+CameraController& Game::get_camera() { return _camera; }
 Vector2i Game::get_tile_size() const { return _tile_size; }
 float Game::get_tps() const { return _tps; }
 
