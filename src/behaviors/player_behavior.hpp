@@ -7,12 +7,11 @@ class CameraController;
 
 class PlayerBehavior : public MobBehavior {
 private:
-    CameraController* _camera;
+    CameraController& _camera;
 
 public:
-    PlayerBehavior(Mob& mob);
-    
-    void ready(Game& ctx) override;
+    PlayerBehavior(Mob& mob, Game& ctx);
+
     void update(float delta) override;
 
 };

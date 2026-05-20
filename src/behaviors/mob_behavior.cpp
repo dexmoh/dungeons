@@ -3,11 +3,11 @@
 #include "game.hpp"
 #include "atoms/mobs/mob.hpp"
 
-MobBehavior::MobBehavior(Mob& mob)
-    : _mob{ &mob },
-      _ctx{ nullptr }
+MobBehavior::MobBehavior(Mob& mob, Game& ctx)
+    : _mob{ mob },
+      _ctx{ ctx }
 {}
 
-void MobBehavior::ready(Game& ctx) { _ctx = &ctx; }
+void MobBehavior::ready() {}
 void MobBehavior::tick() {}
 void MobBehavior::update(float delta) {}

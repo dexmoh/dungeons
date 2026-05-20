@@ -7,13 +7,13 @@ class Mob;
 
 class MobBehavior {
 protected:
-    Mob* _mob;
-    Game* _ctx;
+    Mob& _mob;
+    Game& _ctx;
 
 public:
-    MobBehavior(Mob& mob);
+    MobBehavior(Mob& mob, Game& ctx);
 
-    virtual void ready(Game& ctx);
+    virtual void ready();
     virtual void tick();
     virtual void update(float delta);
 

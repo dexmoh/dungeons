@@ -2,7 +2,9 @@
 
 #include "texture_manager.hpp"
 
-Wall::Wall() {
+Wall::Wall(Game& ctx)
+    : Terrain(ctx)
+{
     _name = "Wall";
     _description = "This is a wall.";
 

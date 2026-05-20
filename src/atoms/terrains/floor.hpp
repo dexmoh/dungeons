@@ -14,6 +14,6 @@ public:
         DIRT_FLOOR_TILE_3 = 5
     };
 
-    Floor();
+    Floor(Game& ctx);
 
 };

@@ -66,9 +66,9 @@ Level::~Level() {
     }
 }
 
-void Level::ready(Game& ctx) {
+void Level::ready() {
     for (auto& atom : _atoms)
-        atom->ready(ctx);
+        atom->ready();
 }
 
 void Level::tick() {
@@ -160,8 +160,8 @@ bool Level::move_mob(Mob& mob, Vector2i dest) {
     return true;
 }
 
-std::unique_ptr<Level> Level::generate_placeholder() {
-    auto player = std::make_unique<Player>();
+std::unique_ptr<Level> Level::generate_placeholder(Game& ctx) {
+    auto player = std::make_unique<Player>(ctx);
     player->set_position({ 1, 1 });
     
     Vector2i lvl_size = { 50, 30 };
@@ -170,9 +170,9 @@ std::unique_ptr<Level> Level::generate_placeholder() {
     for (int x = 0; x < lvl_size.width(); x++) {
         for (int y = 0; y < lvl_size.height(); y++) {
             if (x == 0 || x == lvl_size.width() - 1 || y == 0 || y == lvl_size.height() - 1)
-                lvl->spawn_terrain(std::make_unique<Wall>(), { x, y });
+                lvl->spawn_terrain(std::make_unique<Wall>(ctx), { x, y });
             else
-                lvl->spawn_terrain(std::make_unique<Floor>(), { x, y });
+                lvl->spawn_terrain(std::make_unique<Floor>(ctx), { x, y });
         }
     }
 

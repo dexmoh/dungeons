@@ -5,6 +5,6 @@
 
 class Terrain : public Atom {
 public:
-    Terrain();
+    Terrain(Game& ctx);
 
 };

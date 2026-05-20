@@ -20,9 +20,9 @@ private:
     std::unique_ptr<MobBehavior> _behavior;
 
 public:
-    Mob();
+    Mob(Game& ctx);
 
-    void ready(Game& ctx) override;
+    void ready() override;
     void tick() override;
     void update(float delta) override;
 

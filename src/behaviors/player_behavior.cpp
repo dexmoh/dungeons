@@ -4,21 +4,16 @@
 #include "atoms/mobs/player.hpp"
 #include "camera_controller.hpp"
 
-PlayerBehavior::PlayerBehavior(Mob& mob)
-    : MobBehavior(mob),
-      _camera{ nullptr }
+PlayerBehavior::PlayerBehavior(Mob& mob, Game& ctx)
+    : MobBehavior(mob, ctx),
+      _camera{ ctx.get_camera() }
 {}
-
-void PlayerBehavior::ready(Game& ctx) {
-    MobBehavior::ready(ctx);
-    _camera = &(ctx.get_camera());
-}
 
 void PlayerBehavior::update(float delta) {
     if (IsKeyPressed(KEY_R))
-        _mob->flip();
+        _mob.flip();
 
-    if (_mob->is_moving())
+    if (_mob.is_moving())
         return;
 
     // Handle movement.
@@ -32,19 +27,19 @@ void PlayerBehavior::update(float delta) {
     bool down_right = IsKeyDown(KEY_KP_3) || (down && right);
 
     if (up_left)
-        _mob->try_move(MoveDir::UP_LEFT);
+        _mob.try_move(MoveDir::UP_LEFT);
     else if (up_right)
-        _mob->try_move(MoveDir::UP_RIGHT);
+        _mob.try_move(MoveDir::UP_RIGHT);
     else if (down_left)
-        _mob->try_move(MoveDir::DOWN_LEFT);
+        _mob.try_move(MoveDir::DOWN_LEFT);
     else if (down_right)
-        _mob->try_move(MoveDir::DOWN_RIGHT);
+        _mob.try_move(MoveDir::DOWN_RIGHT);
     else if (up)
-        _mob->try_move(MoveDir::UP);
+        _mob.try_move(MoveDir::UP);
     else if (down)
-        _mob->try_move(MoveDir::DOWN);
+        _mob.try_move(MoveDir::DOWN);
     else if (left)
-        _mob->try_move(MoveDir::LEFT);
+        _mob.try_move(MoveDir::LEFT);
     else if (right)
-        _mob->try_move(MoveDir::RIGHT);
+        _mob.try_move(MoveDir::RIGHT);
 }

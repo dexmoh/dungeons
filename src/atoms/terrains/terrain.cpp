@@ -1,5 +1,7 @@
 #include "atoms/terrains/terrain.hpp"
 
-Terrain::Terrain() {
+Terrain::Terrain(Game& ctx)
+    : Atom(ctx)
+{
     _name = "Terrain";
 }

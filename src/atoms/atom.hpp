@@ -9,7 +9,7 @@ enum class TextureID;
 class Atom {
 private:
     Vector2i _position; // Atom's x and y position in the tile grid.
-    Vector2 _offset;   // Offset from atom's position in pixels.
+    Vector2 _offset;    // Offset from atom's position in pixels.
     float _rotation;    // Sprite rotation with the origin in the center.
     Color _tint;        // Color tint applied to the atom texture.
     bool _solid;        // Whether the atom is solid or not.
@@ -28,7 +28,7 @@ private:
     void _recalculate_sprite_dest();
 
 protected:
-    Game* _ctx; // Game context.
+    Game& _ctx; // Game context.
 
     std::string _name;        // Name of the atom.
     std::string _description; // Description of the atom.
@@ -38,10 +38,10 @@ public:
         DEFAULT_TILE = 0
     };
 
-    Atom();
+    Atom(Game& ctx);
     ~Atom();
 
-    virtual void ready(Game& ctx);    // Called when the atom is ready to begin being processed.
+    virtual void ready();    // Called when the atom is ready to begin being processed.
     virtual void tick();              // Called every tick.
     virtual void update(float delta); // Called every frame.
 

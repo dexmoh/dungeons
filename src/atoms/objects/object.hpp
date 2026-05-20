@@ -4,4 +4,7 @@
 #include "atoms/atom.hpp"
 
 class Object : public Atom {
+public:
+    Object(Game& ctx);
+
 };

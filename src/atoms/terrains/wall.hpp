@@ -9,6 +9,6 @@ public:
         STONE_WALL_TILE = 0
     };
 
-    Wall();
+    Wall(Game& ctx);
 
 };

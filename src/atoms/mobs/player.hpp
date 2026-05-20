@@ -5,6 +5,6 @@
 
 class Player : public Mob {
 public:
-    Player();
+    Player(Game& ctx);
 
 };

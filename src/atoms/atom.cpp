@@ -3,8 +3,8 @@
 #include "game.hpp"
 #include "atom.hpp"
 
-Atom::Atom()
-    : _ctx{ nullptr },
+Atom::Atom(Game& ctx)
+    : _ctx{ ctx },
       _name{ "Atom" },
       _description{ "You shouldn't be seeing this." },
       _position{ Vector2i::ZERO },
@@ -18,26 +18,23 @@ Atom::Atom()
       _sprite_id{ SpriteID::DEFAULT_TILE },
       _flip_h{ false },
       _flip_v{ false }
-{}
-
-Atom::~Atom()
-{}
-
-void Atom::ready(Game& ctx) {
-    _ctx = &ctx;
-
+{
     set_texture_id(_texture_id);
     set_sprite_id(_sprite_id);
     _recalculate_sprite_dest();
 
     // Initial sprite origin.
-    Vector2i tile_size = _ctx->get_tile_size();
+    Vector2i tile_size = _ctx.get_tile_size();
     _sprite_origin = {
         tile_size.width() / 2.0f,
         tile_size.height() / 2.0f
     };
 }
 
+Atom::~Atom()
+{}
+
+void Atom::ready() {}
 void Atom::tick() {}
 void Atom::update(float delta) {}
 
@@ -56,10 +53,7 @@ void Atom::draw() const {
 }
 
 void Atom::_recalculate_sprite_dest() {
-    if (!_ctx)
-        return;
-
-    Vector2i tile_size = _ctx->get_tile_size();
+    Vector2i tile_size = _ctx.get_tile_size();
 
     _sprite_dest = {
         float(_position.x * tile_size.width()) + (tile_size.width() / 2.0f) + _offset.x,
@@ -102,21 +96,14 @@ void Atom::set_visibility(bool visible) {
 
 void Atom::set_texture_id(TextureID id) {
     _texture_id = id;
-
-    if (!_ctx)
-        return;
-
-    _texture = _ctx->get_tex_manager().get_texture(_texture_id);
+    _texture = _ctx.get_tex_manager().get_texture(_texture_id);
 }
 
 void Atom::set_sprite_id(int id) {
     _sprite_id = id;
 
-    if (!_ctx)
-        return;
-
     // Recalculate texture source based on the new sprite ID.
-    Vector2i tile_size = _ctx->get_tile_size();
+    Vector2i tile_size = _ctx.get_tile_size();
     int tiles_per_row = _texture.width / tile_size.width();
 
     _texture_src = {

@@ -4,8 +4,9 @@
 #include "level.hpp"
 #include "tile.hpp"
 
-Mob::Mob()
-    : _movement_speed{ _DEFAULT_MOVEMENT_SPEED },
+Mob::Mob(Game& ctx)
+    : Atom(ctx),
+      _movement_speed{ _DEFAULT_MOVEMENT_SPEED },
       _movement_cooldown{ 0.0f },
       _movement_duration{ 0.0f },
       _initial_offset{ 0.0f, 0.0f },
@@ -14,11 +15,11 @@ Mob::Mob()
       _is_flipping{ false }
 {}
 
-void Mob::ready(Game& ctx) {
-    Atom::ready(ctx);
+void Mob::ready() {
+    Atom::ready();
 
     if (_behavior)
-        _behavior->ready(ctx);
+        _behavior->ready();
 }
 
 void Mob::tick() {
@@ -63,7 +64,7 @@ bool Mob::try_move(MoveDir dir) {
     if (_is_moving)
         return false;
 
-    Level* level = _ctx->get_level();
+    Level* level = _ctx.get_level();
     if (!level)
         return false;
 
@@ -77,7 +78,7 @@ bool Mob::try_move(MoveDir dir) {
         _movement_cooldown = _movement_duration;
         _is_moving = true;
 
-        Vector2i tile_size = _ctx->get_tile_size();
+        Vector2i tile_size = _ctx.get_tile_size();
         _initial_offset = {
             float(-move_vec.x * tile_size.width()),
             float(-move_vec.y * tile_size.height())

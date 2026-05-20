@@ -19,9 +19,11 @@ CameraController::~CameraController() {
 }
 
 void CameraController::init() {
-    _win_resized_id = _ctx.window_resized.connect([this](int, int) {
-        this->_recenter();
-    });
+    _win_resized_id = _ctx.window_resized.connect(
+        [this](int, int) {
+            this->_recenter();
+        }
+    );
 
     _recenter();
     set_position(_position, false);

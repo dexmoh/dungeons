@@ -2,6 +2,8 @@
 
 #include "behaviors/player_behavior.hpp"
 
-Player::Player() {
-    set_behavior(std::make_unique<PlayerBehavior>(*this));
+Player::Player(Game& ctx)
+    : Mob(ctx)
+{
+    set_behavior(std::make_unique<PlayerBehavior>(*this, ctx));
 }
