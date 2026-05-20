@@ -6,7 +6,8 @@
 
 Game::Game()
     : _tile_size{ _DEFAULT_TILE_SIZE, _DEFAULT_TILE_SIZE },
-      _tps{ DEFAULT_TPS }
+      _tps{ DEFAULT_TPS },
+      _camera{ *this }
 {
     // Create a maximized raylib window.
     InitWindow(800, 600, "Dungeons");
@@ -18,7 +19,7 @@ Game::Game()
     _tex_manager.init();
 
     // Initialize camera.
-    _camera.init(*this);
+    _camera.init();
 }
 
 Game::~Game() {
@@ -37,6 +38,9 @@ void Game::run() {
     // Game loop.
     while (!WindowShouldClose()) {
         const float delta = GetFrameTime();
+
+        if (IsWindowResized())
+            window_resized.emit(GetScreenWidth(), GetScreenHeight());
 
         // Handle game ticks.
         tick_counter += delta;

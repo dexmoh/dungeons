@@ -4,20 +4,27 @@
 #include "atoms/atom.hpp"
 #include "level.hpp"
 
-CameraController::CameraController()
-    : _ctx{ nullptr },
+CameraController::CameraController(Game& ctx)
+    : _ctx{ ctx },
       _target{ nullptr },
       _camera{ 0.0f },
       _position { Vector2i::ZERO },
       _offset { 0.0f, 0.0f },
-      _bounds{ 0 }
+      _bounds{ 0 },
+      _win_resized_id{ -1 }
 {}
 
-void CameraController::init(Game& ctx) {
-    _ctx = &ctx;
+CameraController::~CameraController() {
+    _ctx.window_resized.disconnect(_win_resized_id);
+}
+
+void CameraController::init() {
+    _win_resized_id = _ctx.window_resized.connect([this](int, int) {
+        this->_recenter();
+    });
 
     _recenter();
-    set_position(_position);
+    set_position(_position, false);
 
     _camera.rotation = 0.0f;
     _camera.zoom = DEFAULT_ZOOM;
@@ -26,9 +33,6 @@ void CameraController::init(Game& ctx) {
 }
 
 void CameraController::update(float delta) {
-    if (IsWindowResized())
-        _recenter();
-
     if (_target) {
         set_offset(_target->get_offset(), false);
 
@@ -65,7 +69,7 @@ void CameraController::_recenter() {
 }
 
 void CameraController::_recalculate_bounds() {
-    Vector2i tile_size = _ctx->get_tile_size();
+    Vector2i tile_size = _ctx.get_tile_size();
 
     Vector2 world_btm_left = GetScreenToWorld2D(
         { 0, float(GetScreenHeight()) }, _camera
@@ -94,8 +98,8 @@ void CameraController::_recalculate_bounds() {
     _bounds.start_x = (_bounds.start_x < 0) ? 0 : _bounds.start_x;
     _bounds.start_y = (_bounds.start_y < 0) ? 0 : _bounds.start_y;
 
-    if (_ctx->get_level()) {
-        Vector2i lvl_size = _ctx->get_level()->get_size();
+    if (_ctx.get_level()) {
+        Vector2i lvl_size = _ctx.get_level()->get_size();
 
         _bounds.end_x = (_bounds.end_x > lvl_size.width()) ? lvl_size.width() : _bounds.end_x;
         _bounds.end_y = (_bounds.end_y > lvl_size.height()) ? lvl_size.height() : _bounds.end_y;
@@ -113,7 +117,7 @@ void CameraController::set_target(Atom* target) {
 
 void CameraController::set_position(Vector2i position, bool recalculate_bounds) {
     _position = position;
-    Vector2i tile_size = _ctx->get_tile_size();
+    Vector2i tile_size = _ctx.get_tile_size();
 
     _camera.target = {
         _position.x * tile_size.width() + (tile_size.width() / 2.0f) + _offset.x,

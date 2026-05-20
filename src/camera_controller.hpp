@@ -9,12 +9,14 @@ class Atom;
 // Class for managing camera data and logic.
 class CameraController {
 private:
-    Game* _ctx;           // Game context.
+    Game& _ctx;           // Game context.
     Atom* _target;        // Atom that the camera follows.
     Camera2D _camera;     // Raylib camera container.
     Vector2i _position;   // Camera's position in the world grid.
     Vector2 _offset;      // Offset from the original position.
     CameraBounds _bounds; // Camera's world bounding box.
+
+    SignalID _win_resized_id;  // Window resized signal ID.
 
 private:
     void _recenter();           // Recenter camera offset to be in the middle of the screen.
@@ -27,10 +29,11 @@ public:
     static constexpr float ZOOM_FACTOR  = 1.8f;
 
 public:
-    CameraController();
+    CameraController(Game& ctx);
+    ~CameraController();
 
     // Initialize camera.
-    void init(Game& ctx);
+    void init();
 
     // Called every frame.
     void update(float delta);

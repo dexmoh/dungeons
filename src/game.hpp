@@ -20,6 +20,8 @@ private:
     static constexpr int _DEFAULT_TILE_SIZE  = 32;
 
 public:
+    Signal<int, int> window_resized;
+
     static constexpr float DEFAULT_TPS = 10.0f;
 
 public:

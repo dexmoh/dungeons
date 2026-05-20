@@ -2,6 +2,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <functional>
 #include <algorithm>
 #include <iostream>
 #include <cstdint>
@@ -17,5 +18,6 @@
 
 #include "util/vector2i.hpp"
 #include "util/move_dir.hpp"
+#include "util/signal.hpp"
 #include "util/log.hpp"
 #include "util/rng.hpp"
