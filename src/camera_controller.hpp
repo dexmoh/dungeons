@@ -16,6 +16,10 @@ private:
     Vector2 _offset;      // Offset from the original position.
     CameraBounds _bounds; // Camera's world bounding box.
 
+    bool _free_look = false;
+    bool _is_moving = false;
+    float _movement_cooldown = 0.0f;
+
     SignalID _win_resized_id = SIGNAL_NULL_ID;
     SignalID _target_deleted_id = SIGNAL_NULL_ID;
 
@@ -32,6 +36,8 @@ public:
     static constexpr float DEFAULT_ZOOM = 2.0f;
     static constexpr float ZOOM_FACTOR  = 1.8f;
 
+    static constexpr float MOVEMENT_SPEED = 10.0f;
+
 public:
     CameraController(Game& ctx);
     ~CameraController();
@@ -42,12 +48,16 @@ public:
     // Called every frame.
     void update(float delta);
 
+    /* Getters & Setters */
     Atom* get_target();              // Get current target.
+    Vector2i get_position() const;   // Get current camera position.
     Camera2D get_rl_camera() const;  // Returns raylib Camera2D container.
     CameraBounds get_bounds() const; // Get camera bounds clamped to level size.
+    bool get_free_look() const;      // Check if free look is enabled.
 
     void set_target(Atom* target);
     void set_position(Vector2i position, bool recalculate_bounds = true);
     void set_offset(Vector2 offset, bool recalculate_bounds = true);
+    void set_free_look(bool free_look);
 
 };

@@ -5,5 +5,7 @@
 Player::Player(Game& ctx)
     : Mob(ctx)
 {
+    _name = "Player";
+    _description = "It's you!";
     set_behavior(std::make_unique<PlayerBehavior>(*this, ctx));
 }

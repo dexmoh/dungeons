@@ -13,7 +13,7 @@ void PlayerBehavior::update(float delta) {
     if (IsKeyPressed(KEY_R))
         _mob.flip();
 
-    if (_mob.is_moving())
+    if (_mob.is_moving() || _camera.get_free_look())
         return;
 
     // Handle movement.
