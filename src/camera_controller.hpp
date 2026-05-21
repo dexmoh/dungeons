@@ -16,11 +16,15 @@ private:
     Vector2 _offset;      // Offset from the original position.
     CameraBounds _bounds; // Camera's world bounding box.
 
-    SignalID _win_resized_id;  // Window resized signal ID.
+    SignalID _win_resized_id = SIGNAL_NULL_ID;
+    SignalID _target_deleted_id = SIGNAL_NULL_ID;
 
 private:
-    void _recenter();           // Recenter camera offset to be in the middle of the screen.
-    void _recalculate_bounds(); // Recalculate camera's bounding box in world coordinates.
+    // Recenter camera offset to be in the middle of the screen.
+    void _recenter(int width, int height);
+
+    // Recalculate camera's bounding box in world coordinates.
+    void _recalculate_bounds();
 
 public:
     static constexpr float MIN_ZOOM     = 0.5f;

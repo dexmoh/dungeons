@@ -16,6 +16,7 @@ private:
     Object* _object;
     Mob* _mob;
 
+private:
     void _set_position(Vector2i position);
     void _set_terrain(Terrain* terrain);
     void _set_object(Object* object);

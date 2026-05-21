@@ -11,7 +11,7 @@
 #include "util/camera_bounds.hpp"
 
 Level::Level(Vector2i size, std::unique_ptr<Player> player)
-    : _size{ size }, _tiles{ nullptr }, _player{ *(player.get()) }, clear_color{ DEFAULT_CLEAR_COLOR }
+    : _size{ size }, _tiles{ nullptr }, _player{ player.get() }, clear_color{ DEFAULT_CLEAR_COLOR }
 {
     if (_size.width() < 1 || _size.height() < 1) {
         Log::write(
@@ -54,6 +54,17 @@ Level::Level(Vector2i size, std::unique_ptr<Player> player)
         tile = get_tile(player->get_position());
     }
 
+    if (_player)
+        _player->deleted.connect(
+            [this]() {
+                Log::write(
+                    "Player got deleted from the level. This probably shouldn't have happened!",
+                    Log::Level::ERROR
+                );
+                _player = nullptr;
+            }
+        );
+
     tile->_set_mob(player.get());
     _atoms.reserve(total_num_of_tiles + 1);
     _atoms.push_back(std::move(player));
@@ -79,6 +90,45 @@ void Level::tick() {
 void Level::update(float delta) {
     for (auto& atom : _atoms)
         atom->update(delta);
+
+    // Process deletion queue.
+    for (Atom* atom : _deletion_queue) {
+        if (!atom)
+            continue;
+
+        atom->deleted.emit();
+
+        Tile* tile = get_tile(atom->get_position());
+        if (tile) {
+            if (tile->get_terrain() == atom)
+                tile->_set_terrain(nullptr);
+            else if (tile->get_object() == atom)
+                tile->_set_object(nullptr);
+            else if (tile->get_mob() == atom)
+                tile->_set_mob(nullptr);
+            else
+                Log::write(
+                    "Failed to remove an atom from a tile while processing level deletion queue.",
+                    Log::Level::ERROR
+                );
+        }
+        else
+            Log::write(
+                "Failed to a tile to which the atom belongs to while processing level deletion queue.",
+                Log::Level::ERROR
+            );
+
+        int index = _find_atom(*atom);
+        if (index >= 0)
+            _atoms.erase(_atoms.begin() + index);
+        else
+            Log::write(
+                "Failed to find an atom in the atoms list while processing level deletion queue.",
+                Log::Level::ERROR
+            );
+    }
+
+    _deletion_queue.clear();
 }
 
 void Level::draw(CameraBounds bounds) const {
@@ -160,6 +210,11 @@ bool Level::move_mob(Mob& mob, Vector2i dest) {
     return true;
 }
 
+void Level::queue_delete(Atom* atom) {
+    if (atom)
+        _deletion_queue.push_back(atom);
+}
+
 std::unique_ptr<Level> Level::generate_placeholder(Game& ctx) {
     auto player = std::make_unique<Player>(ctx);
     player->set_position({ 1, 1 });
@@ -205,6 +260,6 @@ Tile* Level::get_tile(Vector2i position) const {
     return &_tiles[position.y * _size.width() + position.x];
 }
 
-Player& Level::get_player() {
+Player* Level::get_player() {
     return _player;
 }

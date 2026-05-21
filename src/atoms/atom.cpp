@@ -1,6 +1,7 @@
 #include "atoms/atom.hpp"
 
 #include "game.hpp"
+#include "level.hpp"
 #include "atom.hpp"
 
 Atom::Atom(Game& ctx)
@@ -50,6 +51,18 @@ void Atom::draw() const {
         _rotation,
         _tint
     );
+}
+
+void Atom::queue_delete() {
+    Level* lvl = _ctx.get_level();
+
+    if (lvl)
+        lvl->queue_delete(this);
+    else
+        Log::write(
+            "Couldn't delete an atom because there is no active level currently loaded!",
+            Log::Level::ERROR
+        );
 }
 
 void Atom::_recalculate_sprite_dest() {

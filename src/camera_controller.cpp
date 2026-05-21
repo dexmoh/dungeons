@@ -10,8 +10,7 @@ CameraController::CameraController(Game& ctx)
       _camera{ 0.0f },
       _position { Vector2i::ZERO },
       _offset { 0.0f, 0.0f },
-      _bounds{ 0 },
-      _win_resized_id{ -1 }
+      _bounds{ 0 }
 {}
 
 CameraController::~CameraController() {
@@ -20,12 +19,16 @@ CameraController::~CameraController() {
 
 void CameraController::init() {
     _win_resized_id = _ctx.window_resized.connect(
-        [this](int, int) {
-            this->_recenter();
+        [this](int width, int height) {
+            _recenter(width, height);
         }
     );
 
-    _recenter();
+    _recenter(
+        GetScreenWidth(),
+        GetScreenHeight()
+    );
+
     set_position(_position, false);
 
     _camera.rotation = 0.0f;
@@ -61,10 +64,10 @@ void CameraController::update(float delta) {
     }
 }
 
-void CameraController::_recenter() {
+void CameraController::_recenter(int width, int height) {
     _camera.offset = (Vector2) {
-        GetScreenWidth() / 2.0f,
-        GetScreenHeight() / 2.0f
+        width / 2.0f,
+        height / 2.0f
     };
 
     _recalculate_bounds();
@@ -114,6 +117,19 @@ Camera2D CameraController::get_rl_camera() const { return _camera; }
 CameraBounds CameraController::get_bounds() const { return _bounds; }
 
 void CameraController::set_target(Atom* target) {
+    if (_target && _target_deleted_id != SIGNAL_NULL_ID) {
+        _target->deleted.disconnect(_target_deleted_id);
+        _target_deleted_id = SIGNAL_NULL_ID;
+    }
+
+    if (target)
+        _target_deleted_id = target->deleted.connect(
+            [this]() {
+                _target = nullptr;
+                _target_deleted_id = SIGNAL_NULL_ID;
+            }
+        );
+
     _target = target;
 }
 

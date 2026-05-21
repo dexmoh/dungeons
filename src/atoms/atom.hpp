@@ -38,15 +38,22 @@ public:
         DEFAULT_TILE = 0
     };
 
+    // Emitted right before the atom is about to be deleted.
+    Signal<> deleted;
+
+public:
     Atom(Game& ctx);
     ~Atom();
 
-    virtual void ready();    // Called when the atom is ready to begin being processed.
+    virtual void ready();             // Called when the atom is ready to begin being processed.
     virtual void tick();              // Called every tick.
     virtual void update(float delta); // Called every frame.
 
     // Draws atom to the screen every frame.
     void draw() const;
+
+    // Queue the atom to be deleted at the end of this frame.
+    void queue_delete();
 
     /* Getters & Setters */
     Vector2i get_position() const;

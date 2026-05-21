@@ -31,7 +31,7 @@ void Game::run() {
     if (!_level)
         _level = Level::generate_placeholder(*this);
     _level->ready();
-    _camera.set_target(&(_level->get_player()));
+    _camera.set_target(_level->get_player());
 
     float tick_counter = 0.0f;
 

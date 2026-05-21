@@ -13,10 +13,15 @@ struct CameraBounds;
 
 class Level {
 private:
-    Vector2i _size;
-    Tile* _tiles;
-    Player& _player;
+    Vector2i _size;  // Width and height of the level.
+    Tile* _tiles;    // Array of [width * height] Tile containers used to track which atoms are where.
+    Player* _player; // Our player.
+
+    // List of all of the atoms currently in the level not sorted in any particular order.
     std::vector<std::unique_ptr<Atom>> _atoms;
+
+    // List of atoms queued to be deleted at the end of the frame.
+    std::vector<Atom*> _deletion_queue;
 
 private:
     // Find the index a given atom pointer in the _atoms vector.
@@ -42,11 +47,14 @@ public:
 
     bool move_mob(Mob& mob, Vector2i dest);
 
+    // Queue an atom to be deleted at the end of the frame.
+    void queue_delete(Atom* atom);
+
     // Generate a placeholder level for testing.
     static std::unique_ptr<Level> generate_placeholder(Game& ctx);
 
     Vector2i get_size() const;               // Get level size.
     Tile* get_tile(Vector2i position) const; // Get a tile from the level grid.
-    Player& get_player();                    // Get the player atom.
+    Player* get_player();                    // Get the player atom.
 
 };
