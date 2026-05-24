@@ -4,7 +4,7 @@
 #include "atoms/atom.hpp"
 
 class Terrain : public Atom {
-public:
+protected:
     Terrain(Game& ctx);
 
 };

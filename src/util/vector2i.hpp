@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cstdint>
+
 struct Vector2;
-enum class MoveDir : unsigned char;
+enum class MoveDir : std::uint8_t;
 
 // A 2D vector using integer coordinates.
 class Vector2i {

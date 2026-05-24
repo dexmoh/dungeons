@@ -13,24 +13,27 @@ struct CameraBounds;
 
 class Level {
 private:
-    Vector2i _size;  // Width and height of the level.
-    Tile* _tiles;    // Array of [width * height] Tile containers used to track which atoms are where.
-    Player* _player; // Our player.
+    Vector2i _size = Vector2i::ZERO;
+    Tile* _tiles = nullptr;
+    Player* _player = nullptr;
 
-    // List of all of the atoms currently in the level not sorted in any particular order.
-    std::vector<std::unique_ptr<Atom>> _atoms;
+    std::vector<std::unique_ptr<Terrain>> _terrains;
+    std::vector<std::unique_ptr<Object>> _objects;
+    std::vector<std::unique_ptr<Mob>> _mobs;
+
+    // List of atoms queued to be spawned at the end of the frame.
+    std::vector<std::unique_ptr<Atom>> _spawn_queue;
 
     // List of atoms queued to be deleted at the end of the frame.
     std::vector<Atom*> _deletion_queue;
 
 private:
-    // Find the index a given atom pointer in the _atoms vector.
-    // Returns -1 if the pointer wasn't found.
-    int _find_atom(const Atom& atom) const;
+    void _process_spawn_queue();
+    void _process_deletion_queue();
 
 public:
-    Color clear_color;
     static constexpr Color DEFAULT_CLEAR_COLOR = (Color) { 5, 18, 18, 255 };
+    Color clear_color = DEFAULT_CLEAR_COLOR;
 
 public:
     Level(Vector2i size, std::unique_ptr<Player> player);
@@ -41,11 +44,10 @@ public:
     void update(float delta);             // Forwards an update call to all atoms in the level. Called every frame.
     void draw(CameraBounds bounds) const; // Forwards draw calls to all atoms in the level in correct order. Called every frame.
 
-    bool spawn_terrain(std::unique_ptr<Terrain> terrain, Vector2i position, bool force_replace = false);
-    bool spawn_object(std::unique_ptr<Object> object, Vector2i position, bool force_replace = false);
-    bool spawn_mob(std::unique_ptr<Mob> mob, Vector2i position, bool force_replace = false);
-
     bool move_mob(Mob& mob, Vector2i dest);
+
+    // Queue an atom to be spawn at the end of the frame.
+    void queue_spawn(std::unique_ptr<Atom> atom);
 
     // Queue an atom to be deleted at the end of the frame.
     void queue_delete(Atom* atom);

@@ -5,15 +5,10 @@
 #include "tile.hpp"
 
 Mob::Mob(Game& ctx)
-    : Atom(ctx),
-      _movement_speed{ _DEFAULT_MOVEMENT_SPEED },
-      _movement_cooldown{ 0.0f },
-      _movement_duration{ 0.0f },
-      _initial_offset{ 0.0f, 0.0f },
-      _is_moving{ false },
-      _flip_speed{ _DEFAULT_FLIP_SPEED },
-      _is_flipping{ false }
-{}
+    : Atom(ctx, Atom::BaseType::MOB)
+{
+    _name = "Mob";
+}
 
 void Mob::ready() {
     Atom::ready();

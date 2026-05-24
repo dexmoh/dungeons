@@ -4,7 +4,7 @@
 #include <vector>
 
 using SignalID = int;
-static constexpr SignalID SIGNAL_NULL_ID = -1;
+inline constexpr SignalID SIGNAL_NULL_ID = -1;
 
 // Class for managing signal events.
 template<typename... Args>

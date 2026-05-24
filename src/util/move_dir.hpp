@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cstdint>
+
 // Defines 8 movement directions used by mobs.
-enum class MoveDir : unsigned char {
+enum class MoveDir : std::uint8_t {
     NONE = 0,
     UP,
     DOWN,

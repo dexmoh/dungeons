@@ -5,7 +5,7 @@
 
 class Wall : public Terrain {
 public:
-    enum SpriteID {
+    enum SpriteID : std::uint8_t {
         STONE_WALL_TILE = 0
     };
 

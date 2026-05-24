@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
 
 class Log {
 public:
-    enum class Level {
+    enum class Level : std::uint8_t {
         INFO = 0,
         WARNING,
         ERROR,

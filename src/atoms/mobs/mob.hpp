@@ -6,22 +6,23 @@
 
 class Mob : public Atom {
 private:
-    float _movement_speed;    // Mob's movement speed (in tiles/sec).
-    float _movement_cooldown; // Used to prevent the mob from moving again if it is already moving.
-    float _movement_duration; // The amount of time (in seconds) that last movement took.
-    Vector2 _initial_offset;  // Initial offset at the start of the movement. Used for animating movement transitions.
-    bool _is_moving;          // Set to true if the mob is currently moving.
-    float _flip_speed;        // Flip speed (in deg/sec).
-    bool _is_flipping;        // Set to true if the mob is currently doing a flip.
-
     static constexpr float _DEFAULT_MOVEMENT_SPEED = 5.0f; // (tiles/sec)
     static constexpr float _DEFAULT_FLIP_SPEED = 720.0f;   // (deg/sec)
 
+    float _movement_speed = _DEFAULT_MOVEMENT_SPEED;
+    float _movement_cooldown = 0.0f;
+    float _movement_duration = 0.0f;
+    float _flip_speed = _DEFAULT_FLIP_SPEED;
+    Vector2 _initial_offset = { 0.0f, 0.0f };
+    bool _is_moving = false;
+    bool _is_flipping = false;
+
     std::unique_ptr<MobBehavior> _behavior;
 
-public:
+protected:
     Mob(Game& ctx);
 
+public:
     void ready() override;
     void tick() override;
     void update(float delta) override;

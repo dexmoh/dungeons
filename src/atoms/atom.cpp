@@ -4,21 +4,9 @@
 #include "level.hpp"
 #include "atom.hpp"
 
-Atom::Atom(Game& ctx)
+Atom::Atom(Game& ctx, Atom::BaseType base_type)
     : _ctx{ ctx },
-      _name{ "Atom" },
-      _description{ "You shouldn't be seeing this." },
-      _position{ Vector2i::ZERO },
-      _offset{ 0.0f, 0.0f },
-      _rotation{ 0.0f },
-      _tint{ WHITE },
-      _solid{ false },
-      _visible{ true },
-      _sprite_origin{ 0.0f, 0.0f },
-      _texture_id{ TextureID::TEST_TILES },
-      _sprite_id{ SpriteID::DEFAULT_TILE },
-      _flip_h{ false },
-      _flip_v{ false }
+      BASE_TYPE{ base_type }
 {
     set_texture_id(_texture_id);
     set_sprite_id(_sprite_id);
@@ -31,9 +19,6 @@ Atom::Atom(Game& ctx)
         tile_size.height() / 2.0f
     };
 }
-
-Atom::~Atom()
-{}
 
 void Atom::ready() {}
 void Atom::tick() {}
@@ -80,12 +65,16 @@ void Atom::_recalculate_sprite_dest() {
 Vector2i Atom::get_position() const { return _position; }
 Vector2 Atom::get_offset() const { return _offset; }
 float Atom::get_rotation() const { return _rotation; }
-bool Atom::get_solid() const { return _solid; }
+std::int16_t Atom::get_z_index() const { return _z_index; }
 bool Atom::get_visibility() const { return _visible; }
+bool Atom::get_solid() const { return _solid; }
 bool Atom::get_flip_h() const { return _flip_h; }
 bool Atom::get_flip_v() const { return _flip_v; }
 
 void Atom::set_position(Vector2i position) {
+    if (_position == position)
+        return;
+
     _position = position;
     _recalculate_sprite_dest();
 }
@@ -99,12 +88,12 @@ void Atom::set_rotation(float rotation) {
     _rotation = rotation;
 }
 
-void Atom::set_solid(bool solid) {
-    _solid = solid;
-}
-
 void Atom::set_visibility(bool visible) {
     _visible = visible;
+}
+
+void Atom::set_solid(bool solid) {
+    _solid = solid;
 }
 
 void Atom::set_texture_id(TextureID id) {

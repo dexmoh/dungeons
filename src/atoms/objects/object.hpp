@@ -4,7 +4,7 @@
 #include "atoms/atom.hpp"
 
 class Object : public Atom {
-public:
+protected:
     Object(Game& ctx);
 
 };

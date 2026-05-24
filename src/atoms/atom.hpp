@@ -1,49 +1,62 @@
 #pragma once
 
 #include "pch.hpp"
+#include "texture_manager.hpp"
 
 class Game;
 enum class TextureID;
 
-// A base class for objects that exist inside the game level.
+// A base abstract class for objects that exist inside the game level.
 class Atom {
-private:
-    Vector2i _position; // Atom's x and y position in the tile grid.
-    Vector2 _offset;    // Offset from atom's position in pixels.
-    float _rotation;    // Sprite rotation with the origin in the center.
-    Color _tint;        // Color tint applied to the atom texture.
-    bool _solid;        // Whether the atom is solid or not.
-    bool _visible;      // Whether the atom is visible or not.
+public:
+    enum class BaseType : std::uint8_t {
+        TERRAIN, OBJECT, MOB
+    };
 
-    Texture2D _texture;     // Texture resource used by this atom.
-    Rectangle _texture_src; // Location of the sprite in the texture.
-    Rectangle _sprite_dest; // Destination of where the sprite should be drawn.
-    Vector2 _sprite_origin; // Origin point of the sprite.
-    TextureID _texture_id;  // ID of the texture that needs to be loaded.
-    int _sprite_id;         // ID of the sprite stored in the texture resource.
-    bool _flip_h;           // Set to true if the sprite is flipped horizontally.
-    bool _flip_v;           // Set to true if the sprite is flipped vertically.
+    enum SpriteID : std::uint8_t {
+        DEFAULT_TILE = 0
+    };
+
+private:
+    Vector2i _position = Vector2i::ZERO;
+    Vector2 _offset = { 0.0f, 0.0f };
+    float _rotation = 0.0f;
+    Color _tint = WHITE;
+
+    Vector2 _sprite_origin = { 0.0f, 0.0f };
+    TextureID _texture_id = TextureID::TEST_TILES;
+    int _sprite_id = SpriteID::DEFAULT_TILE;
+    std::int16_t _z_index = 0;
+
+    bool _visible = true;
+    bool _solid = false;
+    bool _flip_h = false;
+    bool _flip_v = false;
+
+    Texture2D _texture;
+    Rectangle _texture_src;
+    Rectangle _sprite_dest;
 
 private:
     void _recalculate_sprite_dest();
 
 protected:
-    Game& _ctx; // Game context.
+    Game& _ctx;
 
-    std::string _name;        // Name of the atom.
-    std::string _description; // Description of the atom.
+    std::string _name = "Atom";
+    std::string _description = "You shouldn't be seeing this.";
+
+protected:
+    Atom(Game& ctx, BaseType base_type);
 
 public:
-    enum SpriteID {
-        DEFAULT_TILE = 0
-    };
+    const BaseType BASE_TYPE;
 
     // Emitted right before the atom is about to be deleted.
     Signal<> deleted;
 
 public:
-    Atom(Game& ctx);
-    ~Atom();
+    virtual ~Atom() = default;
 
     virtual void ready();             // Called when the atom is ready to begin being processed.
     virtual void tick();              // Called every tick.
@@ -59,8 +72,9 @@ public:
     Vector2i get_position() const;
     Vector2 get_offset() const;
     float get_rotation() const;
-    bool get_solid() const;
+    std::int16_t get_z_index() const;
     bool get_visibility() const;
+    bool get_solid() const;
     bool get_flip_h() const;
     bool get_flip_v() const;
 
